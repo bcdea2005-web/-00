@@ -926,7 +926,8 @@
 <div class="modal-overlay" id="offerModal">
   <div class="modal-card" style="max-width:520px">
     <button class="modal-close" onclick="closeOfferModal()">&#10005;</button>
-    <div style="background:linear-gradient(135deg,#FBF4EE,#F0E6D2);padding:28px 26px 20px;text-align:center;position:relative">
+    <img class="modal-img" id="offerModalImg" src="" alt="" style="display:none">
+    <div id="offerModalHead" style="background:linear-gradient(135deg,#FBF4EE,#F0E6D2);padding:28px 26px 20px;text-align:center;position:relative">
       <div style="width:80px;height:80px;border-radius:20px;margin:0 auto 14px;background:linear-gradient(135deg,rgba(230,126,77,.18),rgba(184,137,58,.12));border:1px solid rgba(230,126,77,.3);display:grid;place-items:center;color:var(--orange-deep);box-shadow:0 8px 24px rgba(184,137,58,.18)">
         <svg style="width:42px;height:42px;fill:currentColor"><use href="#i-box"/></svg>
       </div>
@@ -1408,7 +1409,7 @@ function getOfferData(idx){
   if(typeof idx==='undefined')idx=0;
   if(window._allOffers&&window._allOffers[idx]){
     var o=window._allOffers[idx];
-    return{title:o.title,badge:o.badge||'عرض خاص',items:o.items||[],price:o.price,oldPrice:o.originalPrice||0};
+    return{title:o.title,badge:o.badge||'عرض خاص',items:o.items||[],price:o.price,oldPrice:o.originalPrice||0,img:o.img||''};
   }
   var s=document.getElementById('offers');
   if(!s)return null;
@@ -1425,7 +1426,9 @@ function getOfferData(idx){
   var price=priceEl?parseInt(priceEl.textContent.replace(/[^0-9]/g,'')):0;
   var oldPriceEl=info.querySelector('.offer-price s');
   var oldPrice=oldPriceEl?parseInt(oldPriceEl.textContent.replace(/[^0-9]/g,'')):0;
-  return{title:title,badge:badge,items:items,price:price,oldPrice:oldPrice};
+  var imgEl=b.querySelector('.offer-img img');
+  var img=imgEl?imgEl.getAttribute('src')||'':'';
+  return{title:title,badge:badge,items:items,price:price,oldPrice:oldPrice,img:img};
 }
 
 window.openOfferModal = function(idx){
@@ -1455,6 +1458,18 @@ window.openOfferModal = function(idx){
     document.getElementById('offerSavings').textContent = '';
   }
   document.getElementById('offerQty').textContent = '1';
+  var imgEl = document.getElementById('offerModalImg');
+  var headEl = document.getElementById('offerModalHead');
+  if(offer.img){
+    imgEl.src = offer.img;
+    imgEl.alt = offer.title || '';
+    imgEl.style.display = '';
+    if(headEl) headEl.style.display = 'none';
+  } else {
+    imgEl.src = '';
+    imgEl.style.display = 'none';
+    if(headEl) headEl.style.display = '';
+  }
   document.getElementById('offerModal').classList.add('active');
   var closeBtn = document.querySelector('#offerModal .modal-close');
   if(closeBtn) closeBtn.focus();
