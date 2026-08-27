@@ -825,8 +825,10 @@
       <div class="about-text reveal">
         <span class="kicker">— من نحن —</span>
         <h2>قصة <em>مشوي للأسماك واللحوم</em></h2>
-        <p>في شارع الستين، وُلدت فكرة مطعم <b>مشوي للأسماك واللحوم</b> لنقدم تجربة شواء تجمع بين نعمتين طبيعيتين هما نعمة السودان: <b>الأسماك الطازجة</b> من مياه النيل، و<b>اللحوم المنتقاة</b> من أفضل المصادر المحلية.</p>
-        <p>نحن لا نكتفي بتقديم الطعام، بل نصنع لحظات دافئة وذكريات لا تُنسى. كل صنف يمر بأيدي أمينة، وكل قطعة تُشوى أمامك على الفحم الطبيعي بوصفاتنا السرية الخاصة.</p>
+        <div class="story-text">
+          <p>في شارع الستين، وُلدت فكرة مطعم <b>مشوي للأسماك واللحوم</b> لنقدم تجربة شواء تجمع بين نعمتين طبيعيتين هما نعمة السودان: <b>الأسماك الطازجة</b> من مياه النيل، و<b>اللحوم المنتقاة</b> من أفضل المصادر المحلية.</p>
+          <p>نحن لا نكتفي بتقديم الطعام، بل نصنع لحظات دافئة وذكريات لا تُنسى. كل صنف يمر بأيدي أمينة، وكل قطعة تُشوى أمامك على الفحم الطبيعي بوصفاتنا السرية الخاصة.</p>
+        </div>
         <div class="about-values">
           <div class="item"><div class="ico"><svg><use href="#i-shield"/></svg></div><div class="txt">جودة لا تتنازل</div></div>
           <div class="item"><div class="ico"><svg><use href="#i-leaf"/></svg></div><div class="txt">طازج ومحلي</div></div>
@@ -1136,7 +1138,13 @@ function transformCategories(cats){return cats.filter(function(c){return c && !i
 
 function transformOffers(offers){return offers.filter(function(o){return o.active!==false && !isDemoItem(o)}).map(function(o){return{title:o.title,badge:o.badge||'',items:cleanStrings(o.items),price:o.price,originalPrice:o.originalPrice||null,img:o.imageUrl||o.image||''}})}
 
-function transformSettings(s){if(!s)return null;return{heroTitle:s.heroTitle||'',heroSubtitle:s.heroSubtitle||'',aboutStory:s.aboutStory||'',tickerMessages:cleanStrings(s.tickerMessages),workingHours:(s.workingHours||[]).filter(function(h){return h && !isDemoText(h.label) && !isDemoText(h.hours)}),paymentMethods:cleanStrings(s.paymentMethods)}}
+function storyToString(v){
+  if(!v) return '';
+  if(typeof v==='string') return v;
+  if(Array.isArray(v)) return v.map(function(b){return (b&&(b.text||b.code))||''}).join('\n');
+  return String(v);
+}
+function transformSettings(s){if(!s)return null;return{heroTitle:s.heroTitle||'',heroSubtitle:s.heroSubtitle||'',aboutStory:storyToString(s.aboutStory),tickerMessages:cleanStrings(s.tickerMessages),workingHours:(s.workingHours||[]).filter(function(h){return h && !isDemoText(h.label) && !isDemoText(h.hours)}),paymentMethods:cleanStrings(s.paymentMethods)}}
 
 var QUERIES={
   categories:'*[_type=="category"]|order(order asc)',
@@ -1169,7 +1177,18 @@ function applySanityData(data){
     if(data.settings.heroTitle){var h=document.querySelector('.hero h1');if(h)h.textContent=data.settings.heroTitle}
     if(data.settings.heroSubtitle){var p=document.querySelector('.hero p');if(p)p.textContent=data.settings.heroSubtitle}
   }
-  if(data.settings&&data.settings.aboutStory){var ap=document.querySelector('.about-block .story-text');if(ap)ap.textContent=data.settings.aboutStory}
+  if(data.settings&&data.settings.aboutStory){
+    var ap=document.querySelector('.about-block .story-text');
+    if(ap){
+      ap.innerHTML='';
+      String(data.settings.aboutStory).split(/\r?\n+/).forEach(function(par){
+        if(!par.trim())return;
+        var p=document.createElement('p');
+        p.textContent=par.trim();
+        ap.appendChild(p);
+      });
+    }
+  }
 }
 
 function updateCategoryFilters(cats){
