@@ -9,6 +9,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#6B1D1D">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="restaurant">
+<meta property="og:locale" content="ar_SD">
+<meta property="og:site_name" content="مشوي للأسماك واللحوم">
+<meta property="og:title" content="مشوي للأسماك واللحوم | شواء على الفحم — أم درمان">
+<meta property="og:description" content="أجود الأسماك الطازجة واللحوم المنتقاة، تُشوى على الفحم أمامك في أم درمان. اطلب أونلاين واستلم طلبك أو نوصله لك.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="مشوي للأسماك واللحوم | شواء على الفحم — أم درمان">
+<meta name="twitter:description" content="أجود الأسماك الطازجة واللحوم المنتقاة، تُشوى على الفحم أمامك في أم درمان.">
+<link rel="preconnect" href="https://cdn.sanity.io" crossorigin>
+<link rel="dns-prefetch" href="https://197665fs.api.sanity.io">
+<script type="application/ld+json" id="jsonLd">
+{"@context":"https://schema.org","@type":"Restaurant","name":"مشوي للأسماك واللحوم","servesCuisine":["أسماك","مشاوي","مأكولات سودانية"],"telephone":"+249116642510","address":{"@type":"PostalAddress","streetAddress":"أم درمان — شارع الستين، لفة جوبا","addressCountry":"SD"},"acceptsReservations":"True"}
+</script>
 <style>
   :root{
     /* ===== Warm cream / burgundy / burnt orange palette (alRomansiah-inspired) ===== */
@@ -718,12 +733,94 @@
     .bb-btn{padding:8px 14px;font-size:.78rem}
     .bb-btn.offer-btn{font-size:.76rem;padding:8px 12px}
   }
+
+  /* ============================================================
+     إضافات الإنتاج — حالات فارغة / إمكانية وصول / حركة مخفّضة
+     ============================================================ */
+
+  /* حالة فارغة أنيقة بدل الشبكة الفارغة */
+  .empty-state{
+    grid-column:1/-1;text-align:center;padding:54px 26px;
+    background:var(--card);border:1px dashed var(--line);
+    border-radius:var(--r-lg);box-shadow:var(--shadow-sm);
+  }
+  .empty-state .es-ico{
+    width:74px;height:74px;border-radius:20px;margin:0 auto 18px;
+    display:grid;place-items:center;color:var(--orange-deep);
+    background:linear-gradient(135deg,rgba(230,126,77,.15),rgba(184,137,58,.08));
+    border:1px solid rgba(230,126,77,.22);
+  }
+  .empty-state .es-ico svg{width:36px;height:36px;fill:currentColor}
+  .empty-state h3{font-size:1.2rem;font-weight:900;color:var(--burgundy);margin-bottom:8px}
+  .empty-state p{color:var(--ink-soft);font-size:.95rem;max-width:440px;margin:0 auto 20px;line-height:1.75}
+  .empty-state .btn{margin-top:4px}
+
+  /* رسائل التحقق داخل السلة */
+  .form-error{
+    display:none;margin:0 0 10px;padding:10px 14px;border-radius:10px;
+    background:rgba(226,84,42,.10);border:1px solid rgba(226,84,42,.35);
+    color:#9C2D0C;font-size:.85rem;font-weight:700;line-height:1.6;
+  }
+  .form-error.show{display:block}
+  .c-input.invalid{border-color:var(--ember);background:rgba(226,84,42,.05)}
+
+  /* حالة التحميل */
+  .skeleton{
+    border-radius:var(--r);overflow:hidden;background:var(--card);
+    border:1px solid var(--line);box-shadow:var(--shadow-card);
+  }
+  .skeleton .sk-img{aspect-ratio:4/3;background:linear-gradient(100deg,#F3EAE0 30%,#FBF4EE 50%,#F3EAE0 70%);background-size:220% 100%;animation:shimmer 1.3s linear infinite}
+  .skeleton .sk-line{height:12px;margin:14px 18px;border-radius:99px;background:linear-gradient(100deg,#F3EAE0 30%,#FBF4EE 50%,#F3EAE0 70%);background-size:220% 100%;animation:shimmer 1.3s linear infinite}
+  .skeleton .sk-line.w60{width:60%}
+  .skeleton .sk-line.w40{width:40%}
+  @keyframes shimmer{from{background-position:120% 0}to{background-position:-120% 0}}
+
+  /* الشريط الإخباري: حلقة متصلة لا تنقطع */
+  .ticker-inner{display:inline-flex;align-items:center;direction:ltr;padding:8px 0;will-change:transform}
+  .ticker-inner span{direction:rtl;unicode-bidi:isolate;margin:0 28px;flex:none}
+  @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .ticker:hover .ticker-inner{animation-play-state:paused}
+
+  /* إمكانية الوصول: تركيز ظاهر */
+  a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
+  .dish:focus-visible,.filter-btn:focus-visible{
+    outline:3px solid var(--orange);outline-offset:3px;border-radius:6px;
+  }
+  .dish:focus-visible{outline-offset:4px;border-radius:var(--r)}
+  .sr-only{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+  }
+  .skip-link{
+    position:absolute;top:-60px;right:16px;z-index:400;
+    background:var(--burgundy);color:#fff;padding:10px 18px;border-radius:0 0 10px 10px;
+    font-weight:800;transition:top .2s;
+  }
+  .skip-link:focus{top:0}
+
+  /* منع تمرير الخلفية عند فتح نافذة */
+  body.no-scroll{overflow:hidden}
+
+  /* نص التحذير عند تعطيل الجافاسكربت */
+  .noscript-note{
+    position:relative;z-index:5;max-width:1180px;margin:18px auto;padding:16px 22px;
+    background:rgba(226,84,42,.10);border:1px solid rgba(226,84,42,.35);
+    border-radius:var(--r-sm);color:#9C2D0C;font-weight:700;font-size:.92rem;text-align:center;
+  }
+
+  /* احترام تفضيل تقليل الحركة */
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{
+      animation-duration:.001ms!important;animation-iteration-count:1!important;
+      transition-duration:.001ms!important;scroll-behavior:auto!important;
+    }
+    .ticker-inner{animation:none!important}
+    .reveal{opacity:1!important;transform:none!important}
+  }
 </style>
 </head>
+
 <body>
-
-<div class="grain-pattern"></div>
-
 <!-- SVG Icons (sprite) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -735,8 +832,6 @@
     <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 11h18v2c0 4-4 8-9 8s-9-4-9-8v-2zm2 2c0 3 3 6 7 6s7-3 7-6H5zm3-8c0-1 1-2 2-2s2 1 2 2-1 2-2 2-2-1-2-2zm4-1c0-1 1-2 2-2s2 1 2 2-1 2-2 2-2-1-2-2z"/></symbol>
     <symbol id="i-cup" viewBox="0 0 24 24"><path d="M6 3h12l-1 15c0 2-2 3-5 3s-5-1-5-3L6 3zm2 2l.8 13c0 1 1.5 1 3.2 1s3.2 0 3.2-1L16 5H8zm2 3h4v2h-4V8z"/></symbol>
     <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M17 3c-4 0-8 2-10 6-2 4-1 8 2 11 4-1 8-4 10-8 2-4 1-8-2-9zm-6 12c1-3 3-5 6-6-1 3-3 5-6 6z"/></symbol>
-    <symbol id="i-fruit" viewBox="0 0 24 24"><path d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm-1-4l1-2 1 2v2h-2V2z"/></symbol>
-    <symbol id="i-tea" viewBox="0 0 24 24"><path d="M4 7h14v6c0 3-3 6-7 6s-7-3-7-6V7zm14 2h2c1 0 2 1 2 2s-1 2-2 2h-2V9zM6 20h14v2H6v-2zM9 3c0 1 2 1 2 3s-2 2-2 3M13 3c0 1 2 1 2 3s-2 2-2 3"/></symbol>
     <symbol id="i-box" viewBox="0 0 24 24"><path d="M3 6h18v3H3V6zm1 4h16v10c0 1-1 2-2 2H6c-1 0-2-1-2-2V10zm4 4v2h8v-2H8z"/></symbol>
     <symbol id="i-chili" viewBox="0 0 24 24"><path d="M12 2l1 3-1 2c-1 1-2 3-2 5s1 4 3 6 4 3 6 3l-3-1-2 1c-1 1-3 2-5 2s-4-1-6-3-3-4-3-6l1 3 2 1c-1-2-2-4-2-6s1-4 3-6 4-3 6-3z"/></symbol>
     <symbol id="i-truck" viewBox="0 0 24 24"><path d="M1 5h14v9H1V5zm14 3h4l3 3v3h-7V8zM4 15a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm12 0a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/></symbol>
@@ -745,29 +840,32 @@
     <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></symbol>
     <symbol id="i-chat" viewBox="0 0 24 24"><path d="M12 3C6 3 2 6 2 10c0 2 1 4 3 5l-1 4 5-2c1 0 2 1 3 1 6 0 10-3 10-8s-4-7-10-7z"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c-5 1-10-4-9-9z"/></symbol>
-    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></symbol>
     <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3 9-8 11-5-2-8-6-8-11V5l8-3zm-1 6v6l5-3-5-3z"/></symbol>
     <symbol id="i-hand" viewBox="0 0 24 24"><path d="M9 3v9l-2-2c-1-1-3 1-2 2l4 5c1 1 3 2 5 2h3c2 0 4-2 4-4v-6c0-1-1-2-2-2s-2 1-2 2v3-8c0-1-1-2-2-2s-2 1-2 2v6-8c0-1-1-2-2-2S9 2 9 3z"/></symbol>
     <symbol id="i-crown" viewBox="0 0 24 24"><path d="M2 8l4 3 3-6 3 6 3-6 3 6 4-3-2 11H4L2 8zm4 12h12v2H6v-2z"/></symbol>
   </defs>
 </svg>
 
-<!-- Ticker -->
-<div class="ticker">
-  <div class="ticker-inner">
-    <span>مطعم <b>مشوي للأسماك واللحوم</b> &middot; أجود الأصناف الطازجة</span>
-    <span>المشاوي تُشوى طازجة على الفحم أمامك</span>
-    <span><b>توصيل مجاني</b> للطلبات فوق 30,000 ج.س داخل أم درمان</span>
-    <span>للاستفسار والحجز: <b>0912 345 678</b></span>
+<a class="skip-link" href="#menu">تخطَّ إلى قائمة الطعام</a>
+
+<noscript>
+  <div class="noscript-note">
+    قائمة الطعام وسلة الطلبات تحتاجان إلى تفعيل الجافاسكربت. للطلب مباشرة اتصل على
+    <b id="nsPhone" dir="ltr">0116642510</b>.
   </div>
+</noscript>
+
+<!-- Ticker -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner" id="tickerInner"></div>
 </div>
 
 <!-- Navbar -->
 <header id="navbar">
-  <nav>
+  <nav aria-label="التنقل الرئيسي">
     <a class="logo" href="#home">
-      <span class="brand-mark"><svg><use href="#i-flame"/></svg></span>
-      <span class="logo-text"><span class="l1">مشوي</span><span class="l2">للأسماك واللحوم</span></span>
+      <span class="brand-mark"><svg aria-hidden="true"><use href="#i-flame"/></svg></span>
+      <span class="logo-text"><span class="l1" data-cfg="restaurantName">مشوي</span><span class="l2">للأسماك واللحوم</span></span>
     </a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#home" class="active">الرئيسية</a></li>
@@ -777,11 +875,11 @@
       <li><a href="#offers">العروض</a></li>
       <li><a href="#contact">تواصل</a></li>
     </ul>
-    <button class="btn btn-fire cart-trigger" onclick="openCart()">
+    <button type="button" class="btn btn-fire cart-trigger" id="cartTrigger" aria-label="فتح سلة الطلبات">
       السلة
-      <span class="cart-badge" id="navBadge">0</span>
+      <span class="cart-badge" id="navBadge" aria-live="polite">0</span>
     </button>
-    <button class="burger" id="burger" aria-label="القائمة">&#9776;</button>
+    <button type="button" class="burger" id="burger" aria-label="فتح القائمة" aria-expanded="false" aria-controls="navLinks">&#9776;</button>
   </nav>
 </header>
 
@@ -789,27 +887,27 @@
 <section class="hero" id="home">
   <div class="hero-content">
     <span class="overline"><span class="dot"></span> أسماك طازجة &middot; لحوم منتقاة &middot; فحم طبيعي</span>
-    <h1><span>مطعم</span><span class="brand">مشوي للأسماك واللحوم</span></h1>
-    <p class="sub">حيث يلتقي عبق نار الفحم بأجود الأسماك الطازجة وأفضل قطع اللحوم المنتقاة… تجربة شواء أصيلة لا تُنسى.</p>
+    <h1><span>مطعم</span><span class="brand" id="heroBrand">مشوي للأسماك واللحوم</span></h1>
+    <p class="sub" id="heroSub">حيث يلتقي عبق نار الفحم بأجود الأسماك الطازجة وأفضل قطع اللحوم المنتقاة… تجربة شواء أصيلة لا تُنسى.</p>
     <div class="hero-btns">
       <a href="#menu" class="btn btn-fire">استكشف القائمة</a>
       <a href="#about" class="btn btn-ghost">تعرّف علينا</a>
     </div>
     <div class="badges-row">
-      <div class="badge-pill"><svg><use href="#i-shield"/></svg><span>جودة مضمونة</span></div>
-      <div class="badge-pill"><svg><use href="#i-flame"/></svg><span>شواء على الفحم</span></div>
-      <div class="badge-pill"><svg><use href="#i-truck"/></svg><span>توصيل سريع</span></div>
+      <div class="badge-pill"><svg aria-hidden="true"><use href="#i-shield"/></svg><span>جودة مضمونة</span></div>
+      <div class="badge-pill"><svg aria-hidden="true"><use href="#i-flame"/></svg><span>شواء على الفحم</span></div>
+      <div class="badge-pill"><svg aria-hidden="true"><use href="#i-truck"/></svg><span>توصيل سريع</span></div>
     </div>
   </div>
 </section>
 
-<!-- Features (folder-tab cards) -->
+<!-- Features -->
 <div class="features">
   <div class="features-grid">
-    <div class="feature reveal"><div class="f-ico"><svg><use href="#i-wave"/></svg></div><div><h3>أسماك طازجة يومياً</h3><p>نستقبل أجود الأسماك النيلية كل صباح لضمان الطزاجة والجودة.</p></div></div>
-    <div class="feature reveal"><div class="f-ico"><svg><use href="#i-knife"/></svg></div><div><h3>لحوم منتقاة</h3><p>نختار أفضل قطع اللحم من مصادر موثوقة بأيدي خبرائنا.</p></div></div>
-    <div class="feature reveal"><div class="f-ico"><svg><use href="#i-flame"/></svg></div><div><h3>شواء على الفحم</h3><p>كل طبق يُشوى طازجاً على الفحم الطبيعي لحظة طلبك.</p></div></div>
-    <div class="feature reveal"><div class="f-ico"><svg><use href="#i-hand"/></svg></div><div><h3>خدمة مميزة</h3><p>فريقنا مستعد لخدمتك بكل ود واحترام في أي وقت.</p></div></div>
+    <div class="feature reveal"><div class="f-ico"><svg aria-hidden="true"><use href="#i-wave"/></svg></div><div><h3>أسماك طازجة يومياً</h3><p>نستقبل أجود الأسماك النيلية كل صباح لضمان الطزاجة والجودة.</p></div></div>
+    <div class="feature reveal"><div class="f-ico"><svg aria-hidden="true"><use href="#i-knife"/></svg></div><div><h3>لحوم منتقاة</h3><p>نختار أفضل قطع اللحم من مصادر موثوقة بأيدي خبرائنا.</p></div></div>
+    <div class="feature reveal"><div class="f-ico"><svg aria-hidden="true"><use href="#i-flame"/></svg></div><div><h3>شواء على الفحم</h3><p>كل طبق يُشوى طازجاً على الفحم الطبيعي لحظة طلبك.</p></div></div>
+    <div class="feature reveal"><div class="f-ico"><svg aria-hidden="true"><use href="#i-hand"/></svg></div><div><h3>خدمة مميزة</h3><p>فريقنا مستعد لخدمتك بكل ود واحترام في أي وقت.</p></div></div>
   </div>
 </div>
 
@@ -820,18 +918,18 @@
       <div class="about-text reveal">
         <span class="kicker">— من نحن —</span>
         <h2>قصة <em>مشوي للأسماك واللحوم</em></h2>
-        <p>في شارع الستين، وُلدت فكرة مطعم <b>مشوي للأسماك واللحوم</b> لنقدم تجربة شواء تجمع بين نعمتين طبيعيتين هما نعمة السودان: <b>الأسماك الطازجة</b> من مياه النيل، و<b>اللحوم المنتقاة</b> من أفضل المصادر المحلية.</p>
+        <p class="story-text">في شارع الستين، وُلدت فكرة مطعم <b>مشوي للأسماك واللحوم</b> لنقدم تجربة شواء تجمع بين نعمتين طبيعيتين هما نعمة السودان: <b>الأسماك الطازجة</b> من مياه النيل، و<b>اللحوم المنتقاة</b> من أفضل المصادر المحلية.</p>
         <p>نحن لا نكتفي بتقديم الطعام، بل نصنع لحظات دافئة وذكريات لا تُنسى. كل صنف يمر بأيدي أمينة، وكل قطعة تُشوى أمامك على الفحم الطبيعي بوصفاتنا السرية الخاصة.</p>
         <div class="about-values">
-          <div class="item"><div class="ico"><svg><use href="#i-shield"/></svg></div><div class="txt">جودة لا تتنازل</div></div>
-          <div class="item"><div class="ico"><svg><use href="#i-leaf"/></svg></div><div class="txt">طازج ومحلي</div></div>
-          <div class="item"><div class="ico"><svg><use href="#i-flame"/></svg></div><div class="txt">فحم طبيعي 100%</div></div>
-          <div class="item"><div class="ico"><svg><use href="#i-crown"/></svg></div><div class="txt">وصفات أصيلة</div></div>
+          <div class="item"><div class="ico"><svg aria-hidden="true"><use href="#i-shield"/></svg></div><div class="txt">جودة لا تتنازل</div></div>
+          <div class="item"><div class="ico"><svg aria-hidden="true"><use href="#i-leaf"/></svg></div><div class="txt">طازج ومحلي</div></div>
+          <div class="item"><div class="ico"><svg aria-hidden="true"><use href="#i-flame"/></svg></div><div class="txt">فحم طبيعي 100%</div></div>
+          <div class="item"><div class="ico"><svg aria-hidden="true"><use href="#i-crown"/></svg></div><div class="txt">وصفات أصيلة</div></div>
         </div>
       </div>
       <div class="about-visual reveal">
         <div class="img-wrap">
-          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="رسم توضيحي لشواية على الفحم">
             <defs>
               <linearGradient id="bgg" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0" stop-color="#F4A574"/>
@@ -845,7 +943,6 @@
             </defs>
             <rect width="400" height="300" fill="url(#bgg)"/>
             <rect width="400" height="300" fill="url(#rg2)"/>
-            <!-- Stylized grill + flame illustration -->
             <g transform="translate(200 150)">
               <ellipse cx="0" cy="40" rx="120" ry="14" fill="#4D1212" opacity=".55"/>
               <rect x="-100" y="22" width="200" height="14" rx="4" fill="#3D0F0F"/>
@@ -861,7 +958,6 @@
                 <rect x="60" y="14" width="3" height="14" rx="1"/>
                 <rect x="80" y="14" width="3" height="14" rx="1"/>
               </g>
-              <!-- Flame -->
               <path d="M0 14 C -20 -10, -30 -40, -8 -68 C -10 -50, 4 -40, 8 -20 C 14 -32, 18 -22, 16 -10 C 24 -20, 18 4, 0 14 Z" fill="#FFD9B0" opacity=".95"/>
               <path d="M0 8 C -12 -10, -18 -28, -4 -50 C -6 -36, 2 -28, 4 -14 C 8 -22, 12 -14, 10 -4 C 16 -10, 12 4, 0 8 Z" fill="#FF8F1F" opacity=".95"/>
               <path d="M0 4 C -6 -8, -10 -20, -2 -36 C -3 -24, 2 -18, 2 -8 C 4 -14, 6 -8, 5 0 C 8 -4, 6 4, 0 4 Z" fill="#E2542A"/>
@@ -869,8 +965,8 @@
             <text x="200" y="285" text-anchor="middle" font-size="14" font-family="Tajawal, sans-serif" font-weight="700" fill="#FFD9B0" opacity=".75">شواء على الفحم الطبيعي</text>
           </svg>
         </div>
-        <div class="float-badge b1"><svg><use href="#i-wave"/></svg><div>أسماك النيل<small>طازجة كل صباح</small></div></div>
-        <div class="float-badge b2"><svg><use href="#i-knife"/></svg><div>لحوم منتقاة<small>من أفضل المصادر</small></div></div>
+        <div class="float-badge b1"><svg aria-hidden="true"><use href="#i-wave"/></svg><div>أسماك النيل<small>طازجة كل صباح</small></div></div>
+        <div class="float-badge b2"><svg aria-hidden="true"><use href="#i-knife"/></svg><div>لحوم منتقاة<small>من أفضل المصادر</small></div></div>
       </div>
     </div>
   </div>
@@ -882,48 +978,41 @@
     <span class="kicker">— قائمتنا —</span>
     <h2>قائمة <em>الطعام</em></h2>
     <p>اضغط على أي وجبة لمشاهدة تفاصيلها واختيار الإضافات ثم أضفها للسلة.</p>
-    <div class="divider"><span class="line"></span><svg><use href="#i-flame"/></svg><span class="line"></span></div>
+    <div class="divider"><span class="line"></span><svg aria-hidden="true"><use href="#i-flame"/></svg><span class="line"></span></div>
   </div>
-  <div class="filters reveal" id="filters">
-    <button class="filter-btn active" data-filter="all">الكل</button>
-    <button class="filter-btn" data-filter="fish">الأسماك</button>
-    <button class="filter-btn" data-filter="grill">المشاوي</button>
-    <button class="filter-btn" data-filter="main">أطباق رئيسية</button>
-    <button class="filter-btn" data-filter="start">مقبلات وسلطات</button>
-    <button class="filter-btn" data-filter="drink">مشروبات</button>
-  </div>
-  <div class="menu-grid" id="menuGrid"></div>
+  <div class="filters reveal" id="filters" role="tablist" aria-label="تصفية الأصناف"></div>
+  <div class="menu-grid" id="menuGrid" aria-live="polite"></div>
 </section>
 
 <!-- Dish Modal -->
-<div class="modal-overlay" id="dishModal">
+<div class="modal-overlay" id="dishModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-card">
-    <button class="modal-close" onclick="closeModal()">&#10005;</button>
-    <img class="modal-img" id="modalImg" src="" alt="">
+    <button type="button" class="modal-close" id="dishModalClose" aria-label="إغلاق">&#10005;</button>
+    <img class="modal-img" id="modalImg" src="" alt="" width="500" height="220">
     <div class="modal-body">
       <h3 id="modalTitle"></h3>
       <div class="m-sub" id="modalSub"></div>
       <p class="m-desc" id="modalDesc"></p>
       <div class="m-price" id="modalPrice"></div>
-      <div class="extras-title">إضافات اختيارية:</div>
+      <div class="extras-title" id="extrasTitle">إضافات اختيارية:</div>
       <div class="extras-list" id="extrasList"></div>
       <div class="qty-row">
-        <button class="qty-btn" onclick="changeModalQty(-1)">&#8722;</button>
-        <span class="qty-val" id="modalQty">1</span>
-        <button class="qty-btn" onclick="changeModalQty(1)">+</button>
+        <button type="button" class="qty-btn" id="modalMinus" aria-label="إنقاص الكمية">&#8722;</button>
+        <span class="qty-val" id="modalQty" aria-live="polite">1</span>
+        <button type="button" class="qty-btn" id="modalPlus" aria-label="زيادة الكمية">+</button>
       </div>
-      <button class="add-cart-btn" onclick="addFromModal()">إضافة إلى السلة</button>
+      <button type="button" class="add-cart-btn" id="addToCartBtn">إضافة إلى السلة</button>
     </div>
   </div>
 </div>
 
 <!-- Offer Modal -->
-<div class="modal-overlay" id="offerModal">
+<div class="modal-overlay" id="offerModal" role="dialog" aria-modal="true" aria-labelledby="offerModalTitle">
   <div class="modal-card" style="max-width:520px">
-    <button class="modal-close" onclick="closeOfferModal()">&#10005;</button>
+    <button type="button" class="modal-close" id="offerModalClose" aria-label="إغلاق">&#10005;</button>
     <div style="background:linear-gradient(135deg,#FBF4EE,#F0E6D2);padding:28px 26px 20px;text-align:center;position:relative">
       <div style="width:80px;height:80px;border-radius:20px;margin:0 auto 14px;background:linear-gradient(135deg,rgba(230,126,77,.18),rgba(184,137,58,.12));border:1px solid rgba(230,126,77,.3);display:grid;place-items:center;color:var(--orange-deep);box-shadow:0 8px 24px rgba(184,137,58,.18)">
-        <svg style="width:42px;height:42px;fill:currentColor"><use href="#i-box"/></svg>
+        <svg style="width:42px;height:42px;fill:currentColor" aria-hidden="true"><use href="#i-box"/></svg>
       </div>
       <span id="offerModalBadge" style="display:inline-block;background:rgba(230,126,77,.12);border:1px solid rgba(230,126,77,.35);color:var(--orange-deep);border-radius:99px;padding:5px 16px;font-size:.82rem;font-weight:800;margin-bottom:10px">عرض خاص</span>
       <h3 id="offerModalTitle" style="font-size:1.5rem;font-weight:900;color:var(--burgundy);margin-bottom:8px">عرض مشوي</h3>
@@ -939,11 +1028,11 @@
       </div>
       <div id="offerSavings" style="color:#2A6B3D;font-size:.85rem;font-weight:800;margin-bottom:20px"></div>
       <div class="qty-row">
-        <button class="qty-btn" onclick="changeOfferQty(-1)">&#8722;</button>
-        <span class="qty-val" id="offerQty">1</span>
-        <button class="qty-btn" onclick="changeOfferQty(1)">+</button>
+        <button type="button" class="qty-btn" id="offerMinus" aria-label="إنقاص الكمية">&#8722;</button>
+        <span class="qty-val" id="offerQty" aria-live="polite">1</span>
+        <button type="button" class="qty-btn" id="offerPlus" aria-label="زيادة الكمية">+</button>
       </div>
-      <button class="add-cart-btn" onclick="addOfferToCart(window._currentOfferIdx||0)" style="background:linear-gradient(135deg,#B8893A,#D4A84A,#E0C288);color:var(--burgundy-deep);box-shadow:0 8px 22px rgba(184,137,58,.35)">
+      <button type="button" class="add-cart-btn" id="addOfferBtn" style="background:linear-gradient(135deg,#B8893A,#D4A84A,#E0C288);color:var(--burgundy-deep);box-shadow:0 8px 22px rgba(184,137,58,.35)">
         تأكيد وإضافة للسلة
       </button>
     </div>
@@ -951,11 +1040,11 @@
 </div>
 
 <!-- Cart Drawer -->
-<div class="cart-overlay" id="cartOverlay">
+<div class="cart-overlay" id="cartOverlay" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
   <div class="cart-drawer">
     <div class="cart-header">
-      <h3>سلة الطلبات</h3>
-      <button class="close-cart" onclick="closeCart()">&#10005;</button>
+      <h3 id="cartTitle">سلة الطلبات</h3>
+      <button type="button" class="close-cart" id="closeCart" aria-label="إغلاق السلة">&#10005;</button>
     </div>
     <div class="cart-items" id="cartItems">
       <p class="cart-empty">السلة فارغة حالياً</p>
@@ -965,15 +1054,14 @@
         <span>المجموع الإجمالي:</span>
         <span class="tv" id="cartTotal">0 ج.س</span>
       </div>
-      <input type="text" class="c-input" id="custName" placeholder="اسمك الكريم">
-      <input type="tel" class="c-input" id="custPhone" placeholder="رقم الهاتف">
-      <input type="text" class="c-input" id="custAddress" placeholder="العنوان أو الحي بالتفصيل">
-      <select class="c-select" id="custPay">
-        <option value="تحويل بنكك">تحويل بنكك (إرسال الإشعار)</option>
-        <option value="كاش عند الاستلام">كاش عند الاستلام</option>
-        <option value="استلام من المطعم">استلام من المطعم (سفري)</option>
-      </select>
-      <button class="checkout-btn" onclick="sendOrder()">إرسال الطلب عبر واتساب</button>
+      <p class="form-error" id="formError" role="alert"></p>
+      <form id="orderForm" novalidate>
+        <input type="text" class="c-input" id="custName" placeholder="اسمك الكريم" autocomplete="name" required>
+        <input type="tel" class="c-input" id="custPhone" placeholder="رقم الهاتف (مثال: 0911223344)" autocomplete="tel" inputmode="tel" required>
+        <input type="text" class="c-input" id="custAddress" placeholder="العنوان أو الحي بالتفصيل" autocomplete="street-address">
+        <select class="c-select" id="custPay" aria-label="طريقة الدفع"></select>
+        <button type="submit" class="checkout-btn">إرسال الطلب عبر واتساب</button>
+      </form>
     </div>
   </div>
 </div>
@@ -985,13 +1073,13 @@
       <span class="kicker">— خدماتنا —</span>
       <h2>نقدم لك <em>أفضل</em> ما لدينا</h2>
       <p>خدمات متكاملة تجعل تجربتك في مطعم مشوي للأسماك واللحوم مميزة.</p>
-      <div class="divider"><span class="line"></span><svg><use href="#i-flame"/></svg><span class="line"></span></div>
+      <div class="divider"><span class="line"></span><svg aria-hidden="true"><use href="#i-flame"/></svg><span class="line"></span></div>
     </div>
     <div class="services-grid">
-      <div class="service-card reveal"><div class="service-ico"><svg><use href="#i-truck"/></svg></div><h3>خدمة التوصيل</h3><p>نوصل طلبك ساخناً وطازجاً إلى منزلك أو مكتبك داخل أم درمان والخرطوم.</p></div>
-      <div class="service-card reveal"><div class="service-ico"><svg><use href="#i-box"/></svg></div><h3>حفلات وولائم</h3><p>نجهز الوجبات والمشاوي لمناسباتكم الخاصة والحفلات والولائم بأفضل الأسعار.</p></div>
-      <div class="service-card reveal"><div class="service-ico"><svg><use href="#i-grill"/></svg></div><h3>خدمة سفري</h3><p>اطلب من على الطريق واستلم طلبك جاهزاً بأسرع وقت دون انتظار.</p></div>
-      <div class="service-card reveal"><div class="service-ico"><svg><use href="#i-hand"/></svg></div><h3>حجز الطاولات</h3><p>احجز طاولتك مسبقاً لتضمن مكانك في أوقات الذروة وتستمتع بأجواء المطعم.</p></div>
+      <div class="service-card reveal"><div class="service-ico"><svg aria-hidden="true"><use href="#i-truck"/></svg></div><h3>خدمة التوصيل</h3><p>نوصل طلبك ساخناً وطازجاً إلى منزلك أو مكتبك داخل أم درمان والخرطوم.</p></div>
+      <div class="service-card reveal"><div class="service-ico"><svg aria-hidden="true"><use href="#i-box"/></svg></div><h3>حفلات وولائم</h3><p>نجهز الوجبات والمشاوي لمناسباتكم الخاصة والحفلات والولائم بأفضل الأسعار.</p></div>
+      <div class="service-card reveal"><div class="service-ico"><svg aria-hidden="true"><use href="#i-grill"/></svg></div><h3>خدمة سفري</h3><p>اطلب من على الطريق واستلم طلبك جاهزاً بأسرع وقت دون انتظار.</p></div>
+      <div class="service-card reveal"><div class="service-ico"><svg aria-hidden="true"><use href="#i-hand"/></svg></div><h3>حجز الطاولات</h3><p>احجز طاولتك مسبقاً لتضمن مكانك في أوقات الذروة وتستمتع بأجواء المطعم.</p></div>
     </div>
   </div>
 </section>
@@ -1001,7 +1089,7 @@
   <div class="sec-head reveal">
     <span class="kicker">— عروضنا —</span>
     <h2>عروض <em>مشوي</em> الخاصة</h2>
-    <div class="divider"><span class="line"></span><svg><use href="#i-flame"/></svg><span class="line"></span></div>
+    <div class="divider"><span class="line"></span><svg aria-hidden="true"><use href="#i-flame"/></svg><span class="line"></span></div>
   </div>
   <div class="offers-grid" id="offersGrid"></div>
 </section>
@@ -1011,23 +1099,15 @@
   <div class="footer-grid">
     <div class="footer-brand">
       <a class="logo" href="#home">
-        <span class="brand-mark"><svg><use href="#i-flame"/></svg></span>
+        <span class="brand-mark"><svg aria-hidden="true"><use href="#i-flame"/></svg></span>
         <span class="logo-text"><span class="l1">مشوي</span><span class="l2">للأسماك واللحوم</span></span>
       </a>
       <p>مطعم <b>مشوي للأسماك واللحوم</b> — حيث تجتمع نعمتا النيل والفحم بشغف وأمانة. الأسماك الطازجة، اللحوم المنتقاة، والطعم الأصيل هو ما يميزنا.</p>
-      <div class="socials">
-        <a href="#" aria-label="فيسبوك"><svg viewBox="0 0 24 24"><path d="M13.5 21v-8.2h2.8l.4-3.2h-3.2V7.6c0-.9.3-1.6 1.6-1.6h1.7V3.1C16.4 3 15.4 3 14.4 3c-2.4 0-4 1.4-4 4.1v2.5H7.5v3.2h2.9V21h3.1z"/></svg></a>
-        <a href="#" aria-label="إنستغرام"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 3.4a4.9 4.9 0 1 0 0 9.8 4.9 4.9 0 0 0 0-9.8zm0 8.1a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zm6.2-8.3a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0z"/></svg></a>
-        <a href="#" aria-label="واتساب"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 1.8a8.2 8.2 0 0 1 0 16.4 8.1 8.1 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 0 1 12 3.8zm-3 3.4c-.2 0-.5.1-.7.3-.3.3-.9.8-.9 1.9s.7 2.2.8 2.4c.1.2 1.6 2.5 3.9 3.4 1.9.8 2.4.7 2.8.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2-.1-.1-.3-.2-.6-.4l-1.4-.7c-.2-.1-.4-.1-.5.1l-.6.8c-.1.2-.3.2-.5.1-.7-.3-1.4-.7-2-1.3-.5-.5-.9-1.1-1.2-1.7-.1-.2 0-.4.1-.5l.5-.6c.1-.2.1-.3 0-.5l-.6-1.5c-.2-.4-.3-.4-.5-.4h-.1z"/></svg></a>
-      </div>
+      <div class="socials" id="socials"></div>
     </div>
     <div>
-      <h4>ساعات العمل</h4>
-      <ul>
-        <li><span class="fi"><svg><use href="#i-clock"/></svg></span> السبت - الخميس: 11ص - 12م</li>
-        <li><span class="fi"><svg><use href="#i-clock"/></svg></span> الجمعة: 1م - 12م</li>
-        <li><span class="fi"><svg><use href="#i-moon"/></svg></span> رمضان: من بعد الإفطار</li>
-      </ul>
+      <h4 id="hoursHeading">ساعات العمل</h4>
+      <ul id="hoursList"></ul>
     </div>
     <div>
       <h4>روابط سريعة</h4>
@@ -1040,480 +1120,1017 @@
     </div>
     <div>
       <h4>تواصل معنا</h4>
-      <ul>
-        <li><span class="fi"><svg><use href="#i-pin"/></svg></span> أم درمان - السوق الكبير، شارع السيد عبد الرحمن</li>
-        <li><span class="fi"><svg><use href="#i-phone"/></svg></span> 0912 345 678</li>
-        <li><span class="fi"><svg><use href="#i-chat"/></svg></span> واتساب: 0912 345 678</li>
-        <li><span class="fi"><svg><use href="#i-truck"/></svg></span> توصيل داخل أم درمان وخرطوم</li>
-      </ul>
+      <ul id="contactList"></ul>
     </div>
   </div>
-  <div class="copyright">&copy; 2026 <b>مطعم مشوي للأسماك واللحوم</b> &middot; جميع الحقوق محفوظة &middot; صُنع بشغف ونار</div>
+  <div class="copyright">&copy; <span id="year">2026</span> <b>مطعم مشوي للأسماك واللحوم</b> &middot; جميع الحقوق محفوظة &middot; صُنع بشغف ونار</div>
 </footer>
 
 <!-- Bottom Bar -->
 <div class="bottom-bar">
   <div class="bb-total"><span>المجموع:</span><b id="bbTotal">0 ج.س</b></div>
-  <button class="bb-btn offer-btn" onclick="openOfferModal(0)">🎁 عرض اليوم</button>
-  <button class="bb-btn" onclick="openCart()">عرض السلة <span id="bbBadge">0</span></button>
+  <button type="button" class="bb-btn offer-btn" id="offerBtn" hidden>🎁 عرض اليوم</button>
+  <button type="button" class="bb-btn" id="bbCartBtn">عرض السلة <span id="bbBadge">0</span></button>
 </div>
 
-<button id="toTop" aria-label="العودة للأعلى">&uarr;</button>
-<div class="toast" id="toast"></div>
+<button type="button" id="toTop" aria-label="العودة للأعلى">&uarr;</button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<!-- ====== Sanity CMS Integration — Inline ====== -->
 <script>
-var SANITY_CONFIG = {
-  projectId: '197665fs',
-  dataset: 'production',
-  apiVersion: '2024-01-01',
-};
+/* ==================================================================
+   مطعم مشوي للأسماك واللحوم
+   منطق الموقع — كل البيانات من SITE أدناه أو من Sanity CMS.
+   لا توجد أي بيانات وهمية داخل هذا الملف.
+   ================================================================== */
+(function () {
+  'use strict';
 
-var SANITY_API = 'https://' + SANITY_CONFIG.projectId + '.api.sanity.io/v' + SANITY_CONFIG.apiVersion + '/data/query/' + SANITY_CONFIG.dataset;
-var sanityData = null;
-var sanityLoaded = false;
+  /* ------------------------------------------------------------------
+     1) إعدادات المطعم — المصدر المحلي الموثوق
+        هذه القيم الحقيقية تُستخدم مباشرة، ويطغى عليها Sanity إذا
+        احتوت الوثيقة siteSettings على قيمة صالحة لنفس الحقل.
+     ------------------------------------------------------------------ */
+  var SITE = {
+    restaurantName : 'مشوي للأسماك واللحوم',
+    phoneDisplay   : '0116642510',       /* الرقم كما يظهر للزبون */
+    whatsapp       : '249116642510',     /* أرقام فقط، بصيغة دولية، بدون + */
+    address        : 'أم درمان — شارع الستين، لفة جوبا',
+    deliveryArea   : 'أم درمان والخرطوم',
+    currency       : 'ج.س',
+    facebook       : '',                 /* ضع الرابط الكامل أو اتركه فارغاً */
+    instagram      : '',
+    tiktok         : '',
+    hours          : [
+      { label: 'السبت - الخميس', hours: '11ص - 12م' },
+      { label: 'الجمعة',         hours: '1م - 12م' },
+      { label: 'رمضان',          hours: 'من بعد الإفطار' }
+    ],
+    payments       : ['تحويل بنكك (إرسال الإشعار)', 'كاش عند الاستلام', 'استلام من المطعم (سفري)']
+  };
 
-function sanityQuery(query) {
-  var url = SANITY_API + '?query=' + encodeURIComponent(query);
-  return fetch(url).then(function(r){return r.json()}).then(function(d){return d.result}).catch(function(e){console.warn('⚠️ Sanity fetch failed:',e);return null});
-}
+  /* ------------------------------------------------------------------
+     2) Sanity CMS
+        اجعل enabled = false لتشغيل الموقع على SITE / LOCAL_* فقط.
+     ------------------------------------------------------------------ */
+  var SANITY = {
+    enabled    : true,
+    projectId  : '197665fs',
+    dataset    : 'production',
+    apiVersion : '2024-01-01'
+  };
 
-function transformDishes(dishes, categories) {
-  var catMap = {};
-  categories.forEach(function(c){catMap[c._id]=c.key});
-  return dishes.filter(function(d){return d.available!==false}).sort(function(a,b){return(a.order||0)-(b.order||0)}).map(function(d,i){
-    var catKey = catMap[(d.category||{})._ref] || 'fish';
-    var extras=(d.extras||[]).map(function(ex){if(ex.name)return{name:ex.name,price:ex.price};return null}).filter(Boolean);
-    return{id:i+1,title:d.title,sub:d.sub||'',cat:catKey,price:d.price,desc:d.description||'',img:d.imageUrl||d.image||'',tag:d.tag||'',spicy:d.spicy||false,extras:extras};
-  });
-}
+  /* ------------------------------------------------------------------
+     3) مرشّح البيانات التجريبية
+        أي نص وارد من CMS يطابق أحد هذه المدخلات يُتجاهَل ويُستخدم
+        النص المحلي بدله، ويُطبع تحذير في الـ console.
+        ★ أفرغ هذه القائمة بعد تنظيف محتوى Sanity Studio. ★
+     ------------------------------------------------------------------ */
+  var CMS_BLOCKLIST = ['hig', 'da', 'test', 'demo', 'تجربة', 'تجريبي', 'سxشئ'];
 
-function transformCategories(cats){return cats.sort(function(a,b){return(a.order||0)-(b.order||0)}).map(function(c){return{key:c.key,title:c.title,icon:c.icon||''}})}
+  /* ------------------------------------------------------------------
+     4) القائمة الاحتياطية (تعمل عند انقطاع الاتصال بـ Sanity)
+        اتركها فارغة حتى تُدخل الأصناف الحقيقية في Sanity،
+        أو أضفها هنا بنفس البنية:
+        { id:'balti', title:'اسم الصنف', sub:'وصف مختصر', cat:'fish',
+          price:18000, desc:'…', img:'', tag:'hot', spicy:false,
+          extras:[{name:'إضافة اختيارية', price:2000}] }
+        الصور: اترك img فارغاً ليظهر أيقونة القسم، أو ضع رابط صورة حقيقية.
+     ------------------------------------------------------------------ */
+  var LOCAL_MENU   = [];
+  var LOCAL_OFFERS = [];
 
-function transformOffers(offers){return offers.filter(function(o){return o.active!==false}).map(function(o){return{title:o.title,badge:o.badge||'',items:o.items||[],price:o.price,originalPrice:o.originalPrice||null}})}
+  /* عناوين الأقسام الافتراضية إن ورد صنف بتصنيف غير معرّف */
+  var CAT_TITLES = { fish:'الأسماك', grill:'المشاوي', main:'أطباق رئيسية', start:'مقبلات وسلطات', drink:'مشروبات' };
+  var CAT_ICONS  = { fish:'#i-wave', grill:'#i-skewer', main:'#i-box', start:'#i-bowl', drink:'#i-cup' };
+  var STORAGE_KEY = 'mashwi_cart_v1';
 
-function transformSettings(s){if(!s)return null;return{restaurantName:s.restaurantName||'مشوي للأسماك واللحوم',whatsapp:s.whatsapp||'249123456789',phone:s.phone||'',address:s.address||'',heroTitle:s.heroTitle||'',heroSubtitle:s.heroSubtitle||'',aboutStory:s.aboutStory||'',tickerMessages:s.tickerMessages||[],workingHours:s.workingHours||[],paymentMethods:s.paymentMethods||[]}}
+  /* ============================ أدوات ============================ */
+  var $  = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
-var QUERIES={
-  categories:'*[_type=="category"]|order(order asc)',
-  extras:'*[_type=="extra"]',
-  dishes:'*[_type=="dish"]|order(order asc){...,"imageUrl":imageUrl,"image":image.asset->url,category->{_id,key},extras[]{_ref,"name":@->name,"price":@->price}}',
-  offers:'*[_type=="offer"&&active==true]',
-  settings:'*[_type=="siteSettings"][0]'
-};
-
-async function loadSanityData(){
-  try{
-    var r=await Promise.all([sanityQuery(QUERIES.categories),sanityQuery(QUERIES.dishes),sanityQuery(QUERIES.offers),sanityQuery(QUERIES.settings)]);
-    var categories=r[0]||[],dishes=r[1]||[],offers=r[2]||[],settings=r[3]||null;
-    sanityData={categories:transformCategories(categories),dishes:transformDishes(dishes,categories),offers:transformOffers(offers),settings:transformSettings(settings)};
-    sanityLoaded=true;
-    console.log('✅ Sanity data loaded:',sanityData.dishes.length,'dishes');
-    return sanityData;
-  }catch(e){console.warn('⚠️ Could not load Sanity data:',e);return null}
-}
-
-function applySanityData(data){
-  if(!data)return;
-  if(data.settings&&data.settings.whatsapp)window.PHONE=data.settings.whatsapp;
-  if(data.dishes&&data.dishes.length>0){window.menu=data.dishes;renderMenu(window.menu)}
-  if(data.categories&&data.categories.length>0)updateCategoryFilters(data.categories);
-  if(data.settings&&data.settings.tickerMessages&&data.settings.tickerMessages.length>0)updateTicker(data.settings.tickerMessages);
-  if(data.offers&&data.offers.length>0)updateOffers(data.offers);
-  if(data.settings&&data.settings.paymentMethods&&data.settings.paymentMethods.length>0)updatePaymentMethods(data.settings.paymentMethods);
-  if(data.settings&&data.settings.workingHours&&data.settings.workingHours.length>0)updateWorkingHours(data.settings.workingHours);
-  if(data.settings){
-    if(data.settings.heroTitle){var h=document.querySelector('.hero h1');if(h)h.innerHTML=data.settings.heroTitle}
-    if(data.settings.heroSubtitle){var p=document.querySelector('.hero p');if(p)p.textContent=data.settings.heroSubtitle}
+  function esc(v) {
+    return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
   }
-  if(data.settings&&data.settings.aboutStory){var ap=document.querySelector('.about-block .story-text');if(ap)ap.textContent=data.settings.aboutStory}
-}
+  function str(v)  { return String(v == null ? '' : v).trim(); }
+  function toNum(v) {
+    if (typeof v === 'number') return isFinite(v) ? v : 0;
+    var n = parseFloat(str(v).replace(/[^\d.\-]/g, ''));
+    return isFinite(n) ? n : 0;
+  }
+  function digits(v) { return str(v).replace(/\D/g, ''); }
+  /* أرقام لاتينية ثابتة في كل المتصفحات — يمنع تحوّل الأسعار إلى ١٨٬٠٠٠ ثم NaN */
+  function fmt(n)  { return toNum(n).toLocaleString('en-US'); }
+  function money(n){ return fmt(n) + ' ' + SITE.currency; }
+  function norm(v) { return str(v).toLowerCase().replace(/\s+/g, ' '); }
+  function blocked(v) {
+    var n = norm(v);
+    if (!n) return true;
+    return CMS_BLOCKLIST.some(function (b) { return n === norm(b) || n.indexOf(norm(b)) !== -1; });
+  }
+  function waNumber(raw) {
+    var d = digits(raw);
+    if (!d) return '';
+    if (d.charAt(0) === '0') d = '249' + d.slice(1);
+    else if (d.length === 9) d = '249' + d;
+    return d;
+  }
+  function telHref(v) { var d = waNumber(v); return d ? 'tel:+' + d : ''; }
+  function waLink(msg) {
+    var n = waNumber(SITE.whatsapp);
+    return 'https://wa.me/' + n + '?text=' + encodeURIComponent(msg || 'السلام عليكم');
+  }
+  function warn() {
+    if (window.console && console.warn) console.warn.apply(console, ['[مشوي]'].concat([].slice.call(arguments)));
+  }
 
-function updateCategoryFilters(cats){
-  var f=document.getElementById('filters');if(!f)return;
-  var h='<button class="filter-btn active" data-filter="all">الكل</button>';
-  cats.forEach(function(c){h+='<button class="filter-btn" data-filter="'+c.key+'">'+c.title+'</button>'});
-  f.innerHTML=h;
-  f.querySelectorAll('.filter-btn').forEach(function(btn){btn.addEventListener('click',function(){f.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');var fl=btn.dataset.filter;if(fl==='all')renderMenu(window.menu);else renderMenu(window.menu.filter(function(d){return d.cat===fl}))})});
-}
+  /* ============================ الحالة ============================ */
+  var state = {
+    dishes: [], categories: [], offers: [],
+    filter: 'all', cart: [], cmsTicker: [], lastSync: 0, source: 'محلي'
+  };
 
-function updateTicker(msgs){var inner=document.querySelector('.ticker-inner');if(!inner)return;var h='';msgs.forEach(function(m){h+='<span>'+m+'</span>'});inner.innerHTML=h}
+  /* ====================== تخزين السلة محلياً ====================== */
+  function loadCart() {
+    try {
+      var raw = window.localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      var arr = JSON.parse(raw);
+      if (!Array.isArray(arr)) return [];
+      return arr.filter(function (i) { return i && i.title && toNum(i.unitPrice) > 0 && toNum(i.qty) > 0; })
+                .map(function (i) {
+                  i.qty = Math.min(99, Math.max(1, toNum(i.qty)));
+                  i.basePrice = toNum(i.basePrice);
+                  i.extrasTotal = toNum(i.extrasTotal);
+                  i.unitPrice = toNum(i.unitPrice);
+                  i.extras = Array.isArray(i.extras) ? i.extras : [];
+                  return i;
+                });
+    } catch (e) { warn('تعذّرت قراءة السلة المحفوظة:', e); return []; }
+  }
+  function saveCart() {
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state.cart)); }
+    catch (e) { /* المتصفح في وضع خاص — نتجاهل بهدوء */ }
+  }
 
-function updateOffers(offers){
-  window._allOffers=offers;
-  var g=document.getElementById('offersGrid');if(!g)return;
-  g.innerHTML='';
-  if(!offers.length)return;
-  offers.forEach(function(o,idx){
-    var banner=document.createElement('div');
-    banner.className='offer-banner reveal in';
-    var itemsHtml='';
-    if(o.items){o.items.forEach(function(item){itemsHtml+='<li>'+item+'</li>'})}
-    var priceHtml='<b>'+o.price.toLocaleString()+' ج.س</b>';
-    if(o.originalPrice)priceHtml+='<s>'+o.originalPrice.toLocaleString()+' ج.س</s>';
-    var icons=['#i-box','#i-grill','#i-flame','#i-hand'];
-    var icon=icons[idx%icons.length];
-    banner.innerHTML='<div class="big-ico"><svg><use href="'+icon+'"/></svg></div>'+
-      '<div class="offer-info">'+
-      '<span class="tag">'+(o.badge||'عرض خاص')+'</span>'+
-      '<h3>'+o.title+'</h3>'+
-      '<ul>'+itemsHtml+'</ul>'+
-      '<div class="offer-price">'+priceHtml+'</div>'+
-      '<a href="javascript:void(0)" class="btn btn-fire" onclick="openOfferModal('+idx+')" >اطلب العرض الآن</a>'+
-      '</div>';
-    g.appendChild(banner);
-  });
-}
+  /* ========================== الأشرطة ========================== */
+  function tickerMessages() {
+    var base = [
+      'مطعم ' + SITE.restaurantName + ' \u00b7 أجود الأصناف الطازجة',
+      'المشاوي تُشوى طازجة على الفحم أمامك',
+      'توصيل داخل ' + SITE.deliveryArea,
+      'للاستفسار والحجز: ' + SITE.phoneDisplay
+    ];
+    var extra = (state.cmsTicker || []).filter(function (m) {
+      m = str(m);
+      if (m.length < 6) { warn('رسالة شريط إخباري أقصر من 6 أحرف — تم تجاهلها:', JSON.stringify(m)); return false; }
+      return !blocked(m);
+    });
+    return base.concat(extra);
+  }
+  function renderTicker() {
+    var inner = $('#tickerInner');
+    if (!inner) return;
+    var msgs = tickerMessages();
+    var run = msgs.map(function (m) { return '<span>' + esc(m) + '</span>'; }).join('');
+    inner.innerHTML = run + run;   /* نسختان متطابقتان = حلقة متصلة بلا انقطاع */
+  }
 
-function updatePaymentMethods(methods){var sel=document.getElementById('custPay');if(!sel)return;sel.innerHTML='';methods.forEach(function(m){var o=document.createElement('option');o.value=m;o.textContent=m;sel.appendChild(o)})}
+  function renderContact() {
+    var ul = $('#contactList');
+    if (!ul) return;
+    /* تُبنى الصفوف شرطياً — لا يُطبع أي رابط بلا وجهة صالحة */
+    function row(icon, inner) {
+      return '<li><span class="fi"><svg aria-hidden="true"><use href="' + icon + '"/></svg></span>' + inner + '</li>';
+    }
+    var rows = [];
+    if (str(SITE.address)) rows.push(row('#i-pin', '<span>' + esc(SITE.address) + '</span>'));
 
-function updateWorkingHours(hours){
-  var hrs=document.querySelectorAll('#contact h4');for(var i=0;i<hrs.length;i++){if(hrs[i].textContent.indexOf('ساعات')>=0){var ul=hrs[i].nextElementSibling;if(ul){ul.innerHTML='';hours.forEach(function(h){var li=document.createElement('li');li.innerHTML='<span class="fi"><svg><use href="#i-clock"/></svg></span> '+h.label+': '+h.hours;ul.appendChild(li)})}break}}
-}
-</script>
-<script>
-/* ====== بيانات محلية احتياطية ====== */
-var PHONE = "249123456789";
-var menu = [
-  {id:1,title:"بلطي مشوي",sub:"من النيل الأزرق",cat:"fish",price:18000,desc:"سمك طازج متبل بالثوم والليمون والبهارات السرية، مشوي على الفحم مع الأرز الأصفر.",img:"https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?auto=format&fit=crop&w=600&q=80",tag:"fresh",extras:[{name:"أرز إضافي",price:2000},{name:"صوص حار",price:500},{name:"سلطة",price:2500}]},
-  {id:2,title:"قرموط مقلي",sub:"مقرمش خارجاً طري داخلاً",cat:"fish",price:15000,desc:"شرائح سميكة مقلية بالبقسماط والبهارات، تقدم مع صوص الطحينة الحار وسلطة.",img:"https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80",tag:"hot",extras:[{name:"بطاطس",price:2500},{name:"صوص طحينة إضافي",price:500},{name:"خبز إضافي",price:1000}]},
-  {id:3,title:"جمبري مشوي",sub:"مع الثوم والليمون",cat:"fish",price:22000,desc:"جمبري كبير الحجم طازج، مشوي على الفحم مع صوص الثوم والزبدة والليمون.",img:"https://images.unsplash.com/photo-1625943553852-781c6dd46faa?auto=format&fit=crop&w=600&q=80",tag:"fresh",extras:[{name:"أرز بالزعفران",price:3000},{name:"صوص خاص",price:1000}]},
-  {id:4,title:"عجوة مشوي",sub:"وصفة نيلية أصيلة",cat:"fish",price:20000,desc:"سمك عجوة كبير مشوي بالكامل مع البهارات النيلية، يقدم مع الأرز والسلطة الخضراء.",img:"https://images.unsplash.com/photo-1534604973900-c43ab4c2e0ab?auto=format&fit=crop&w=600&q=80",tag:"",extras:[{name:"سلطة",price:2500},{name:"صوص حار",price:500}]},
-  {id:5,title:"سمك مشكل",sub:"بلطي + قرموط + جمبري",cat:"fish",price:32000,desc:"تشكيلة فاخرة من أنواع الأسماك المشوية والمقلية، مع الأرز والصوصات المتنوعة.",img:"https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=600&q=80",tag:"hot",extras:[{name:"أرز إضافي",price:2000},{name:"صوص خاص",price:1000}]},
-  {id:6,title:"فسيخ سوداني",sub:"تحضير خاص",cat:"fish",price:10000,desc:"فسيخ محضّر بالطريقة السودانية الأصيلة مع البصل والليمون والفلفل الحار.",img:"https://images.unsplash.com/photo-1510130387422-82bed34b37e9?auto=format&fit=crop&w=600&q=80",tag:"",spicy:true,extras:[]},
-  {id:7,title:"مشاوي مشكلة",sub:"طبقنا الأشهر",cat:"grill",price:28000,desc:"تشكيلة فاخرة: كباب لحم، شيش طاووق، كفتة، وريش غنم مع خبز طازج وصوصنا الخاص.",img:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80",tag:"hot",extras:[{name:"خبز إضافي",price:1000},{name:"صوص حار",price:500},{name:"حمص بالطحينة",price:3000},{name:"بطاطس",price:2500}]},
-  {id:8,title:"شيش طاووق",sub:"تتبيلة الليمون والثوم",cat:"grill",price:9000,desc:"مكعبات صدور دجاج طرية متبلة بالليمون والثوم، تُشوى على الفحم حتى الذهبية.",img:"https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=600&q=80",tag:"",spicy:true,extras:[{name:"أرز",price:2000},{name:"صوص ثوم إضافي",price:500}]},
-  {id:9,title:"كباب لحم",sub:"لحم غنم مفروم طازج",cat:"grill",price:13000,desc:"لحم غنم مفروم طازج مع بهاراتنا السرية والبقدونس، يقدم مع الخبز والمخللات.",img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=600&q=80",tag:"",extras:[{name:"صوص حار",price:500},{name:"خبز",price:1000},{name:"سلطة خضراء",price:2500}]},
-  {id:10,title:"ريش غنم",sub:"قطع منتقاة",cat:"grill",price:19000,desc:"ريش غنم طرية متبلة لمدة 12 ساعة، تُشوى ببطء حتى الذوبان في الفم.",img:"https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80",tag:"hot",extras:[{name:"أرز بالزعفران",price:3000},{name:"متبل باذنجان",price:3000}]},
-  {id:11,title:"كفتة مشوية",sub:"على الفحم",cat:"grill",price:10000,desc:"أصابع الكفتة المحشوة بالبهارات والبصل، مع صوص الطحينة وصوصنا الحار.",img:"https://images.unsplash.com/photo-1541013224537-5d0349192810?auto=format&fit=crop&w=600&q=80",tag:"",spicy:true,extras:[{name:"خبز",price:1000},{name:"صوص حار",price:500}]},
-  {id:12,title:"أجنحة مشوية",sub:"صوص حار بالعسل",cat:"grill",price:8000,desc:"أجنحة مقرمشة مغطاة بصوصنا الحار بالعسل، ترش عليها الليمون وتنسى اسمك.",img:"https://images.unsplash.com/photo-1527477396000-e27163b4811356?auto=format&fit=crop&w=600&q=80",tag:"hot",extras:[{name:"صوص إضافي",price:500},{name:"بطاطس",price:2500}]},
-  {id:13,title:"الوليمة العائلية",sub:"تكفي 5 - 6 أشخاص",cat:"main",price:65000,desc:"سمك بلطي كامل + مشاوي مشكلة + جمبري + أرز بالزعفران + مقبلات وسلطات… وليمة كاملة.",img:"https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80",tag:"hot",extras:[{name:"عصير مانجو (لتر)",price:5000},{name:"حلوى",price:4000}]},
-  {id:14,title:"نصف دجاجة مشوية",sub:"مع أرز بالزعفران",cat:"main",price:12000,desc:"نصف دجاجة كاملة متبلة ومشوية على الفحم، تقدم مع الأرز بالزعفران وصوص الثوم.",img:"https://images.unsplash.com/photo-1598103442097-8b74394b95c6?auto=format&fit=crop&w=600&q=80",tag:"",extras:[{name:"أرز إضافي",price:2000},{name:"صوص ثوم",price:500}]},
-  {id:15,title:"سيادية سمك",sub:"أرز باللحم والسمك",cat:"main",price:14000,desc:"أرز مطبوخ بمرق السمك والبصل الكرميلي مع قطعة سمك مشوية… وصفة أصيلة.",img:"https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=600&q=80",tag:"new",extras:[{name:"سلطة",price:2500},{name:"صوص حار",price:500}]},
-  {id:16,title:"طحينة سمك",sub:"وصفة المطعم الخاصة",cat:"start",price:3500,desc:"طحينة كريمية بلحم السمك المفروم والبهارات، تقدم باردة مع الخبز الطازج.",img:"https://images.unsplash.com/photo-1455619034136-a5e3225e9306?auto=format&fit=crop&w=600&q=80",tag:"",extras:[]},
-  {id:17,title:"متبل باذنجان",sub:"مدخن على الفحم",cat:"start",price:3000,desc:"باذنجان مشوي على الفحم يمنحه طعماً مدخناً، مع الطحينة والليمون والثوم.",img:"https://images.unsplash.com/photo-1512621776800-5e18d4e2e8d8?auto=format&fit=crop&w=600&q=80",tag:"",extras:[]},
-  {id:18,title:"سلطة خضراء",sub:"طازجة يومياً",cat:"start",price:2500,desc:"خس، طماطم، خيار وفلفل ملون مع خلطة الليمون وزيت الزيتون أو صوص الرانش.",img:"https://images.unsplash.com/photo-1512621776800-5e18d4e2e8d8?auto=format&fit=crop&w=600&q=80",tag:"",extras:[]},
-  {id:19,title:"بطاطس مشوي",sub:"مقرمشة بتوابلنا",cat:"start",price:2500,desc:"بطاطس مقلية ذهبية مغطاة بتوابلنا الخاصة، تقدم مع صوص الجبن أو الكاتشب الحار.",img:"https://images.unsplash.com/photo-1573080496219-bb080dd4d28b?auto=format&fit=crop&w=600&q=80",tag:"",spicy:true,extras:[]},
-  {id:20,title:"سلطة روبيان",sub:"منعشة وخفيفة",cat:"start",price:6500,desc:"جمبري مسلوق مع الأفوكادو والخس وصوص الكوكتيل الخاص… بداية مثالية.",img:"https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80",tag:"new",extras:[]},
-  {id:21,title:"عصير مانجو طازج",sub:"بدون سكر مضاف",cat:"drink",price:3000,desc:"مانجو طبيعي 100% يُعصر طازجاً عند الطلب — رفيق الأسماك والمشاوي المثالي.",img:"https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&w=600&q=80",tag:"",extras:[]},
-  {id:22,title:"كركديه مثلج",sub:"نكهة سودانية",cat:"drink",price:2000,desc:"كركديه بارد منعش من ولاية شندي، يقدم مثلجاً مع النعناع الطازج.",img:"https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=600&q=80",tag:"",extras:[]},
-  {id:23,title:"ليموناضة بالنعناع",sub:"منعشة جداً",cat:"drink",price:2500,desc:"عصير ليمون طازج مع النعناع والسكر البني… مثالي مع الأسماك المشوية.",img:"https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&w=600&q=80",tag:"",extras:[]},
-  {id:24,title:"شاي بالنعناع",sub:"على أصوله",cat:"drink",price:1000,desc:"شاي أحمر مغلي على أصوله مع النعناع الطازج — لا يكتمل العشاء بدونه.",img:"https://images.unsplash.com/photo-1571934811356-5cc061b6821f?auto=format&fit=crop&w=600&q=80",tag:"",extras:[]},
-  {id:25,title:"مشروبات غازية",sub:"باردة",cat:"drink",price:1500,desc:"تشكيلة المشروبات الغازية المثلجة: كولا، برتقال، ليمون والفواكه المتوفرة.",img:"https://images.unsplash.com/photo-1581006852262-e4307cf6283a?auto=format&fit=crop&w=600&q=80",tag:"",extras:[]}
-];
-
-var cart = [];
-var modalDish = null;
-var modalQty = 1;
-var modalExtras = [];
-
-/* ===== SVG placeholder for dish images (used while loading or if image fails) ===== */
-var ICONS_BY_CAT = {fish:'#i-wave',grill:'#i-skewer',main:'#i-box',start:'#i-bowl',drink:'#i-cup'};
-var FALLBACK_SVG = '<svg viewBox="0 0 64 48" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="48" fill="#FBF4EE"/><path d="M32 14c-2 0-3 1.5-5 1.5-3 0-4.5 2-4.5 4.5 0 5 2.5 7.5 3.5 12 .5 2.5 4 2.5 4.5-.1.4-1.7.9-3.5 2-3.5s1.6 1.8 2 3.5c.5 2.6 4 2.6 4.5.1 1-4.5 3.5-7 3.5-12 0-2.5-1.5-4.5-4.5-4.5-2 0-3-1.5-5-1.5z" fill="#E67E4D" opacity=".4"/></svg>';
-
-function renderMenu(items){
-  var g = document.getElementById('menuGrid');
-  g.innerHTML = '';
-  items.forEach(function(d){
-    var ic = ICONS_BY_CAT[d.cat]||'#i-flame';
-    var tg = '';
-    if(d.tag==='hot') tg='<span class="tag hot">الأكثر طلباً</span>';
-    else if(d.tag==='fresh') tg='<span class="tag fresh">طازج اليوم</span>';
-    else if(d.tag==='new') tg='<span class="tag new">جديد</span>';
-    var sp = d.spicy ? '<svg class="spicy"><use href="#i-chili"/></svg>' : '';
-
-    /* Image: if URL provided, use img with onerror fallback; otherwise show SVG */
-    var imgHtml;
-    if(d.img){
-      imgHtml = '<div class="dish-img">'+
-                '<img src="'+d.img+'" alt="'+d.title+'" loading="lazy" onerror="this.style.display=\'none\';this.parentElement.querySelector(\'.dish-img-fallback\').style.display=\'grid\';">'+
-                '<div class="dish-img-fallback" style="display:none"><svg><use href="'+ic+'"/></svg></div>'+
-                '</div>';
-    } else {
-      imgHtml = '<div class="dish-img"><div class="dish-img-fallback" style="display:grid"><svg><use href="'+ic+'"/></svg></div></div>';
+    var tel = telHref(SITE.phoneDisplay);
+    if (tel && str(SITE.phoneDisplay)) {
+      rows.push(row('#i-phone', '<a href="' + esc(tel) + '" dir="ltr">' + esc(SITE.phoneDisplay) + '</a>'));
+    } else if (str(SITE.phoneDisplay)) {
+      rows.push(row('#i-phone', '<span dir="ltr">' + esc(SITE.phoneDisplay) + '</span>'));
     }
 
+    if (waNumber(SITE.whatsapp)) {
+      rows.push(row('#i-chat',
+        '<a href="' + esc(waLink('السلام عليكم، أرغب في الاستفسار')) + '" target="_blank" rel="noopener" dir="ltr">واتساب: ' +
+        esc(SITE.phoneDisplay || SITE.whatsapp) + '</a>'));
+    }
+    if (str(SITE.deliveryArea)) rows.push(row('#i-truck', '<span>توصيل داخل ' + esc(SITE.deliveryArea) + '</span>'));
+    ul.innerHTML = rows.join('');
+  }
+
+  function renderHours() {
+    var ul = $('#hoursList');
+    if (!ul) return;
+    var rows = (SITE.hours || []).filter(function (h) { return h && str(h.label); });
+    if (!rows.length) { ul.innerHTML = ''; return; }
+    ul.innerHTML = rows.map(function (h, i) {
+      var ico = (i === rows.length - 1 && /رمضان/.test(str(h.label))) ? '#i-moon' : '#i-clock';
+      return '<li><span class="fi"><svg aria-hidden="true"><use href="' + ico + '"/></svg></span>' +
+             '<span>' + esc(h.label) + ': ' + esc(h.hours) + '</span></li>';
+    }).join('');
+  }
+
+  function renderSocials() {
+    var box = $('#socials');
+    if (!box) return;
+    var items = [
+      { url: SITE.facebook,  label: 'فيسبوك',  path: 'M13.5 21v-8.2h2.8l.4-3.2h-3.2V7.6c0-.9.3-1.6 1.6-1.6h1.7V3.1C16.4 3 15.4 3 14.4 3c-2.4 0-4 1.4-4 4.1v2.5H7.5v3.2h2.9V21h3.1z' },
+      { url: SITE.instagram, label: 'إنستغرام', path: 'M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 12 12s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 3.4a4.9 4.9 0 1 0 0 9.8 4.9 4.9 0 0 0 0-9.8zm0 8.1a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zm6.2-8.3a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0z' },
+      { url: waNumber(SITE.whatsapp) ? waLink('السلام عليكم') : '', label: 'واتساب', path: 'M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 1.8a8.2 8.2 0 0 1 0 16.4 8.1 8.1 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 0 1 12 3.8zm-3 3.4c-.2 0-.5.1-.7.3-.3.3-.9.8-.9 1.9s.7 2.2.8 2.4c.1.2 1.6 2.5 3.9 3.4 1.9.8 2.4.7 2.8.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2-.1-.1-.3-.2-.6-.4l-1.4-.7c-.2-.1-.4-.1-.5.1l-.6.8c-.1.2-.3.2-.5.1-.7-.3-1.4-.7-2-1.3-.5-.5-.9-1.1-1.2-1.7-.1-.2 0-.4.1-.5l.5-.6c.1-.2.1-.3 0-.5l-.6-1.5c-.2-.4-.3-.4-.5-.4h-.1z' }
+    ].filter(function (i) { return /^https?:\/\//i.test(str(i.url)); });   /* لا تُطبع أيقونة بلا رابط حقيقي */
+
+    if (!items.length) { box.innerHTML = ''; box.style.display = 'none'; return; }
+    box.style.display = '';
+    box.innerHTML = items.map(function (i) {
+      return '<a href="' + esc(i.url) + '" aria-label="' + esc(i.label) + '" target="_blank" rel="noopener">' +
+             '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + i.path + '"/></svg></a>';
+    }).join('');
+  }
+
+  function renderPayments() {
+    var sel = $('#custPay');
+    if (!sel) return;
+    var list = (SITE.payments || []).filter(function (p) { return str(p) && !blocked(p); });
+    if (!list.length) list = ['كاش عند الاستلام'];
+    sel.innerHTML = list.map(function (p) {
+      return '<option value="' + esc(p) + '">' + esc(p) + '</option>';
+    }).join('');
+  }
+
+  function renderIdentity() {
+    document.title = SITE.restaurantName + ' | شواء على الفحم — ' + SITE.deliveryArea.split(' ')[0];
+    $$('[data-cfg="restaurantName"]').forEach(function (el) {
+      el.textContent = SITE.restaurantName.split(' ')[0];
+    });
+    var brand = $('#heroBrand');
+    if (brand) brand.textContent = SITE.restaurantName;
+    var ns = $('#nsPhone');
+    if (ns) ns.textContent = SITE.phoneDisplay;
+    var y = $('#year');
+    if (y) y.textContent = String(new Date().getFullYear());
+    renderJsonLd();
+  }
+
+  function renderJsonLd() {
+    var el = $('#jsonLd');
+    if (!el) return;
+    var data = {
+      '@context': 'https://schema.org',
+      '@type': 'Restaurant',
+      'name': SITE.restaurantName,
+      'servesCuisine': ['أسماك', 'مشاوي', 'مأكولات سودانية'],
+      'telephone': '+' + waNumber(SITE.phoneDisplay),
+      'address': { '@type': 'PostalAddress', 'streetAddress': SITE.address, 'addressCountry': 'SD' },
+      'priceRange': SITE.currency,
+      'acceptsReservations': 'True'
+    };
+    el.textContent = JSON.stringify(data);
+  }
+
+  /* ========================== الأقسام ========================== */
+  function visibleDishes() {
+    return state.filter === 'all'
+      ? state.dishes
+      : state.dishes.filter(function (d) { return d.cat === state.filter; });
+  }
+
+  function emptyCard(icon, title, text) {
+    var el = document.createElement('div');
+    el.className = 'empty-state';
+    el.innerHTML =
+      '<div class="es-ico"><svg aria-hidden="true"><use href="' + icon + '"/></svg></div>' +
+      '<h3>' + esc(title) + '</h3>' +
+      '<p>' + esc(text) + '</p>' +
+      '<a class="btn btn-fire" href="' + esc(waLink('السلام عليكم، أرغب في الاستفسار عن قائمة الطعام')) + '" target="_blank" rel="noopener">استفسر عبر واتساب</a>';
+    return el;
+  }
+
+  function skeleton() {
+    var el = document.createElement('div');
+    el.className = 'skeleton';
+    el.setAttribute('aria-hidden', 'true');
+    el.innerHTML = '<div class="sk-img"></div><div class="sk-line"></div><div class="sk-line w60"></div><div class="sk-line w40"></div>';
+    return el;
+  }
+
+  function tagHtml(tag) {
+    if (tag === 'hot')   return '<span class="tag hot">الأكثر طلباً</span>';
+    if (tag === 'fresh') return '<span class="tag fresh">طازج اليوم</span>';
+    if (tag === 'new')   return '<span class="tag new">جديد</span>';
+    return '';
+  }
+
+  function dishCard(d) {
+    var ic = CAT_ICONS[d.cat] || '#i-flame';
     var el = document.createElement('article');
     el.className = 'dish';
     el.dataset.cat = d.cat;
-    el.onclick = function(){ openDishModal(d.id); };
+    el.dataset.id  = d.id;
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('role', 'button');
+    el.setAttribute('aria-label', 'تفاصيل ' + str(d.title) + ' — ' + money(d.price));
+
+    var imgHtml = d.img
+      ? '<div class="dish-img"><img src="' + esc(d.img) + '" alt="' + esc(d.title) + '" loading="lazy" decoding="async">' +
+        '<div class="dish-img-fallback" style="display:none"><svg aria-hidden="true"><use href="' + ic + '"/></svg></div></div>'
+      : '<div class="dish-img"><div class="dish-img-fallback" style="display:grid"><svg aria-hidden="true"><use href="' + ic + '"/></svg></div></div>';
+
     el.innerHTML = imgHtml +
       '<div class="dish-body">' +
-        '<div class="dish-top"><div class="dish-ico"><svg><use href="'+ic+'"/></svg></div>' +
-        '<div><h3>'+d.title+'</h3><div class="dish-sub">'+d.sub+'</div></div></div>' +
-        '<p class="desc">'+d.desc+'</p>' +
-        '<div class="dish-foot"><span class="price">'+d.price.toLocaleString()+' <small>ج.س</small></span>'+tg+sp+'</div>' +
+        '<div class="dish-top"><div class="dish-ico"><svg aria-hidden="true"><use href="' + ic + '"/></svg></div>' +
+        '<div><h3>' + esc(d.title) + '</h3><div class="dish-sub">' + esc(d.sub) + '</div></div></div>' +
+        '<p class="desc">' + esc(d.desc) + '</p>' +
+        '<div class="dish-foot"><span class="price">' + fmt(d.price) + ' <small>' + esc(SITE.currency) + '</small></span>' +
+        tagHtml(d.tag) + (d.spicy ? '<svg class="spicy" aria-label="حار"><use href="#i-chili"/></svg>' : '') + '</div>' +
       '</div>';
-    g.appendChild(el);
-  });
-}
 
-// Filter
-document.querySelectorAll('.filter-btn').forEach(function(btn){
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active')});
-    btn.classList.add('active');
-    var f = btn.dataset.filter;
-    if(f==='all') renderMenu(menu);
-    else renderMenu(menu.filter(function(d){return d.cat===f}));
-  });
-});
-
-// Modal
-function openDishModal(id){
-  var d = menu.find(function(x){return x.id===id});
-  if(!d) return;
-  modalDish = d; modalQty = 1; modalExtras = [];
-  var mi = document.getElementById('modalImg');
-  mi.src = d.img || '';
-  mi.style.display = d.img ? 'block' : 'none';
-  document.getElementById('modalTitle').textContent = d.title;
-  document.getElementById('modalSub').textContent = d.sub;
-  document.getElementById('modalDesc').textContent = d.desc;
-  document.getElementById('modalPrice').textContent = d.price.toLocaleString()+' ج.س';
-  document.getElementById('modalQty').textContent = '1';
-  var el = document.getElementById('extrasList');
-  el.innerHTML = '';
-  if(d.extras && d.extras.length > 0){
-    d.extras.forEach(function(ex,i){
-      var div = document.createElement('div');
-      div.className = 'extra-item';
-      div.innerHTML = '<label><input type="checkbox" data-idx="'+i+'" onchange="toggleExtra(this,'+i+')"> '+ex.name+'</label><span class="extra-price">+ '+ex.price.toLocaleString()+' ج.س</span>';
-      el.appendChild(div);
-    });
-  } else {
-    el.innerHTML = '<p style="color:var(--ink-soft);font-size:.85rem;">لا توجد إضافات لهذا الصنف.</p>';
-  }
-  document.getElementById('dishModal').classList.add('active');
-}
-
-function closeModal(){ document.getElementById('dishModal').classList.remove('active'); }
-
-window.toggleExtra = function(cb,idx){
-  var item = cb.closest('.extra-item');
-  if(cb.checked){ modalExtras.push(idx); item.classList.add('selected'); }
-  else { modalExtras = modalExtras.filter(function(i){return i!==idx}); item.classList.remove('selected'); }
-};
-
-window.changeModalQty = function(d){
-  modalQty = Math.max(1,modalQty+d);
-  document.getElementById('modalQty').textContent = modalQty;
-};
-
-window.addFromModal = function(){
-  if(!modalDish) return;
-  var extras = modalExtras.map(function(i){return modalDish.extras[i]});
-  var extrasTotal = extras.reduce(function(s,e){return s+e.price},0);
-  var item = {
-    id: Date.now(), dishId: modalDish.id, title: modalDish.title,
-    basePrice: modalDish.price, extras: extras, extrasTotal: extrasTotal,
-    unitPrice: modalDish.price + extrasTotal, qty: modalQty
-  };
-  cart.push(item);
-  closeModal();
-  updateCart();
-  showToast('✅ تمت إضافة ' + modalDish.title + ' إلى السلة');
-};
-
-// Cart
-window.openCart = function(){ document.getElementById('cartOverlay').classList.add('active'); };
-window.closeCart = function(){ document.getElementById('cartOverlay').classList.remove('active'); };
-
-/* ===== Offer Modal ===== */
-var offerQty = 1;
-
-function getOfferData(idx){
-  if(typeof idx==='undefined')idx=0;
-  if(window._allOffers&&window._allOffers[idx]){
-    var o=window._allOffers[idx];
-    return{title:o.title,badge:o.badge||'عرض خاص',items:o.items||[],price:o.price,oldPrice:o.originalPrice||0};
-  }
-  var s=document.getElementById('offers');
-  if(!s)return null;
-  var banners=s.querySelectorAll('.offer-banner');
-  var b=banners[idx]||banners[0];
-  if(!b)return null;
-  var info=b.querySelector('.offer-info');
-  if(!info)return null;
-  var title=info.querySelector('h3')?info.querySelector('h3').textContent:'عرض خاص';
-  var badge=info.querySelector('.tag')?info.querySelector('.tag').textContent:'عرض خاص';
-  var items=[];
-  info.querySelectorAll('ul li').forEach(function(li){items.push(li.textContent)});
-  var priceEl=info.querySelector('.offer-price b');
-  var price=priceEl?parseInt(priceEl.textContent.replace(/[^0-9]/g,'')):0;
-  var oldPriceEl=info.querySelector('.offer-price s');
-  var oldPrice=oldPriceEl?parseInt(oldPriceEl.textContent.replace(/[^0-9]/g,'')):0;
-  return{title:title,badge:badge,items:items,price:price,oldPrice:oldPrice};
-}
-
-window.openOfferModal = function(idx){
-  if(typeof idx==='undefined')idx=0;
-  window._currentOfferIdx=idx;
-  var offer = getOfferData(idx);
-  if(!offer){ showToast('لا يوجد عرض متاح حالياً'); return; }
-  offerQty = 1;
-  document.getElementById('offerModalBadge').textContent = offer.badge;
-  document.getElementById('offerModalTitle').textContent = offer.title;
-  var ul = document.getElementById('offerModalList');
-  ul.innerHTML = '';
-  offer.items.forEach(function(item){
-    var li = document.createElement('li');
-    li.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px';
-    li.innerHTML = '<span style="color:var(--orange-deep);font-weight:900;font-size:.8rem">\u2714</span> ' + item;
-    ul.appendChild(li);
-  });
-  document.getElementById('offerModalPrice').textContent = offer.price.toLocaleString() + ' ج.س';
-  if(offer.oldPrice > 0){
-    document.getElementById('offerModalOldPrice').textContent = offer.oldPrice.toLocaleString() + ' ج.س';
-    document.getElementById('offerModalOldPrice').style.display = '';
-    var savings = offer.oldPrice - offer.price;
-    document.getElementById('offerSavings').textContent = 'توفر ' + savings.toLocaleString() + ' ج.س!';
-  } else {
-    document.getElementById('offerModalOldPrice').style.display = 'none';
-    document.getElementById('offerSavings').textContent = '';
-  }
-  document.getElementById('offerQty').textContent = '1';
-  document.getElementById('offerModal').classList.add('active');
-};
-
-window.closeOfferModal = function(){ document.getElementById('offerModal').classList.remove('active'); };
-
-window.changeOfferQty = function(d){
-  offerQty = Math.max(1, offerQty + d);
-  document.getElementById('offerQty').textContent = offerQty;
-};
-
-window.addOfferToCart = function(idx){
-  if(typeof idx==='undefined')idx=0;
-  var offer = getOfferData(idx);
-  if(!offer) return;
-  var item = {
-    id: Date.now(),
-    dishId: 'offer',
-    title: '🎁 ' + offer.title,
-    basePrice: offer.price,
-    extras: [],
-    extrasTotal: 0,
-    unitPrice: offer.price,
-    qty: offerQty
-  };
-  cart.push(item);
-  closeOfferModal();
-  updateCart();
-  showToast('✅ تمت إضافة العرض إلى السلة');
-};
-
-function updateCart(){
-  var count = cart.reduce(function(s,i){return s+i.qty},0);
-  var total = cart.reduce(function(s,i){return s+(i.unitPrice*i.qty)},0);
-  document.getElementById('navBadge').textContent = count;
-  document.getElementById('bbBadge').textContent = count;
-  document.getElementById('cartTotal').textContent = total.toLocaleString()+' ج.س';
-  document.getElementById('bbTotal').textContent = total.toLocaleString()+' ج.س';
-  var c = document.getElementById('cartItems');
-  if(cart.length===0){ c.innerHTML = '<p class="cart-empty">السلة فارغة حالياً</p>'; return; }
-  c.innerHTML = '';
-  cart.forEach(function(item,idx){
-    var extrasText = item.extras.map(function(e){return e.name}).join('، ')||'بدون إضافات';
-    var div = document.createElement('div');
-    div.className = 'cart-item';
-    div.innerHTML = '<div class="ci-info"><h4>'+item.title+'</h4><div class="ci-extras">'+extrasText+'</div><div class="ci-price">'+(item.unitPrice*item.qty).toLocaleString()+' ج.س</div></div><div class="ci-controls"><button class="ci-btn" onclick="cartQty('+idx+',-1)">\u2212</button><span class="ci-qty">'+item.qty+'</span><button class="ci-btn" onclick="cartQty('+idx+',1)">+</button></div>';
-    c.appendChild(div);
-  });
-}
-
-window.cartQty = function(idx,d){
-  cart[idx].qty += d;
-  if(cart[idx].qty <= 0) cart.splice(idx,1);
-  updateCart();
-};
-
-// Checkout
-window.sendOrder = function(){
-  if(cart.length===0){alert('أضف وجبات للسلة أولاً');return}
-  var name = document.getElementById('custName').value.trim();
-  var phone = document.getElementById('custPhone').value.trim();
-  var addr = document.getElementById('custAddress').value.trim();
-  var pay = document.getElementById('custPay').value;
-  if(!name||!phone){alert('يرجى كتابة الاسم ورقم الهاتف');return}
-  var total = cart.reduce(function(s,i){return s+(i.unitPrice*i.qty)},0);
-  var msg = 'طلب جديد من مطعم مشوي للأسماك واللحوم\n';
-  msg += '-----------------------------------\n';
-  msg += 'العميل: '+name+'\n';
-  msg += 'الهاتف: '+phone+'\n';
-  msg += 'العنوان: '+(addr||'استلام من المطعم')+'\n';
-  msg += 'طريقة الدفع: '+pay+'\n';
-  msg += '-----------------------------------\n';
-  msg += 'تفاصيل الطلب:\n';
-  cart.forEach(function(item,i){
-    var ex = item.extras.length>0 ? ' ('+item.extras.map(function(e){return e.name}).join('، ')+')' : '';
-    msg += (i+1)+'. '+item.title+ex+' \xd7 '+item.qty+' = '+(item.unitPrice*item.qty).toLocaleString()+' ج.س\n';
-  });
-  msg += '-----------------------------------\n';
-  msg += 'المجموع الإجمالي: '+total.toLocaleString()+' ج.س';
-  window.open('https://wa.me/'+PHONE+'?text='+encodeURIComponent(msg),'_blank');
-};
-
-// Toast
-function showToast(msg){
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 3500);
-}
-
-// Scroll & Nav
-var header = document.getElementById('navbar');
-var toTop = document.getElementById('toTop');
-window.addEventListener('scroll',function(){
-  header.classList.toggle('scrolled',window.scrollY>10);
-  toTop.classList.toggle('show',window.scrollY>500);
-});
-toTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
-
-var burger = document.getElementById('burger');
-var navLinks = document.getElementById('navLinks');
-burger.addEventListener('click',function(){navLinks.classList.toggle('open')});
-navLinks.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){navLinks.classList.remove('open')})});
-
-var sections = document.querySelectorAll('section[id]');
-var linkMap = {};
-document.querySelectorAll('.nav-links a').forEach(function(a){linkMap[a.getAttribute('href').slice(1)]=a});
-var so = new IntersectionObserver(function(entries){
-  entries.forEach(function(en){
-    if(en.isIntersecting){
-      document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.remove('active')});
-      var link = linkMap[en.target.id];
-      if(link) link.classList.add('active');
+    var img = $('img', el);
+    if (img) {
+      img.addEventListener('error', function () {
+        img.style.display = 'none';
+        var fb = $('.dish-img-fallback', el);
+        if (fb) fb.style.display = 'grid';
+      });
     }
-  });
-},{rootMargin:'-40% 0px -55% 0px'});
-sections.forEach(function(s){so.observe(s)});
+    el.addEventListener('click', function () { openDishModal(d.id); });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); openDishModal(d.id); }
+    });
+    return el;
+  }
 
-// Reveal on scroll
-var io = new IntersectionObserver(function(entries){
-  entries.forEach(function(en){ if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)} });
-},{threshold:.12});
-window._revealObserver=io;
-document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+  function renderMenu() {
+    var grid = $('#menuGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
 
-// Close overlays on outside click
-document.getElementById('dishModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
-document.getElementById('offerModal').addEventListener('click',function(e){if(e.target===this)closeOfferModal()});
-document.getElementById('cartOverlay').addEventListener('click',function(e){if(e.target===this)closeCart()});
+    if (!state.dishes.length) {
+      grid.appendChild(emptyCard('#i-grill', 'القائمة قيد التحديث',
+        'نعمل حالياً على رفع قائمتنا الكاملة. تواصل معنا مباشرة وسنخدمك فوراً.'));
+      return;
+    }
+    var items = visibleDishes();
+    if (!items.length) {
+      grid.appendChild(emptyCard('#i-bowl', 'لا توجد أصناف في هذا القسم',
+        'اختر قسماً آخر من الأعلى، أو تواصل معنا لطلب أي صنف ترغب به.'));
+      return;
+    }
+    var frag = document.createDocumentFragment();
+    items.forEach(function (d) { frag.appendChild(dishCard(d)); });
+    grid.appendChild(frag);
+  }
 
-// ====== Sanity: load and apply ======
-async function initSanity() {
-  var data = await loadSanityData();
-  if (data) { applySanityData(data); }
-}
+  function renderFilters() {
+    var bar = $('#filters');
+    if (!bar) return;
+    var counts = {};
+    state.dishes.forEach(function (d) { counts[d.cat] = (counts[d.cat] || 0) + 1; });
 
-// Init
-renderMenu(menu);
-updateCart();
+    /* تُعرض فقط الأقسام التي تحتوي أصنافاً فعلاً — لا أزرار تُظهر شبكة فارغة */
+    var cats = state.categories.filter(function (c) { return counts[c.key]; });
+    Object.keys(counts).forEach(function (k) {
+      if (!cats.some(function (c) { return c.key === k; })) cats.push({ key: k, title: CAT_TITLES[k] || k });
+    });
 
-initSanity();
-setInterval(function() { initSanity(); }, 5 * 60 * 1000);
+    bar.innerHTML = '';
+    if (!cats.length) { bar.hidden = true; return; }
+    bar.hidden = false;
+
+    function btn(key, title, n) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'filter-btn' + (state.filter === key ? ' active' : '');
+      b.dataset.filter = key;
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', state.filter === key ? 'true' : 'false');
+      b.textContent = title + ' (' + n + ')';
+      return b;
+    }
+    bar.appendChild(btn('all', 'الكل', state.dishes.length));
+    cats.forEach(function (c) { bar.appendChild(btn(c.key, str(c.title) || c.key, counts[c.key])); });
+  }
+
+  /* ========================== العروض ========================== */
+  function renderOffers() {
+    var grid = $('#offersGrid'), sec = $('#offers'), btn = $('#offerBtn');
+    var navLink = $('#navLinks a[href="#offers"]');
+    var footLink = $('.footer-grid a[href="#offers"]');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    var has = state.offers.length > 0;
+    if (sec)      sec.hidden = !has;
+    if (btn)      btn.hidden = !has;
+    if (navLink)  navLink.parentElement.hidden = !has;
+    if (footLink) footLink.parentElement.hidden = !has;
+    if (!has) return;
+
+    var icons = ['#i-box', '#i-grill', '#i-flame', '#i-hand'];
+    state.offers.forEach(function (o, idx) {
+      var el = document.createElement('div');
+      el.className = 'offer-banner reveal';
+      el.dataset.idx = String(idx);
+      var items = (o.items || []).map(function (i) { return '<li>' + esc(i) + '</li>'; }).join('');
+      var price = '<b>' + fmt(o.price) + ' ' + esc(SITE.currency) + '</b>' +
+                  (toNum(o.originalPrice) > 0 ? '<s>' + fmt(o.originalPrice) + ' ' + esc(SITE.currency) + '</s>' : '');
+      el.innerHTML =
+        '<div class="big-ico"><svg aria-hidden="true"><use href="' + icons[idx % icons.length] + '"/></svg></div>' +
+        '<div class="offer-info">' +
+          '<span class="tag">' + esc(o.badge || 'عرض خاص') + '</span>' +
+          '<h3>' + esc(o.title) + '</h3>' +
+          (items ? '<ul>' + items + '</ul>' : '') +
+          '<div class="offer-price">' + price + '</div>' +
+          '<button type="button" class="btn btn-fire" data-offer="' + idx + '">اطلب العرض الآن</button>' +
+        '</div>';
+      grid.appendChild(el);
+      if (revealObserver) revealObserver.observe(el);
+    });
+  }
+
+  /* ====================== نافذة الصنف ====================== */
+  var modalDish = null, modalQty = 1, modalExtras = [], offerQty = 1, currentOffer = 0;
+
+  function openDishModal(id) {
+    var d = null;
+    for (var i = 0; i < state.dishes.length; i++) if (state.dishes[i].id === id) { d = state.dishes[i]; break; }
+    if (!d) return;
+    modalDish = d; modalQty = 1; modalExtras = [];
+
+    var mi = $('#modalImg');
+    if (d.img) {
+      mi.src = d.img;
+      mi.alt = d.title;
+      mi.style.display = 'block';
+      mi.onerror = function () { mi.style.display = 'none'; };
+    } else {
+      mi.removeAttribute('src');
+      mi.alt = '';
+      mi.style.display = 'none';
+    }
+    $('#modalTitle').textContent = d.title;
+    $('#modalSub').textContent   = d.sub || '';
+    $('#modalDesc').textContent  = d.desc || '';
+    $('#modalPrice').textContent = money(d.price);
+    $('#modalQty').textContent   = '1';
+
+    var el = $('#extrasList'), title = $('#extrasTitle');
+    el.innerHTML = '';
+    if (d.extras && d.extras.length) {
+      title.hidden = false;
+      d.extras.forEach(function (ex, i) {
+        var div = document.createElement('div');
+        div.className = 'extra-item';
+        div.innerHTML =
+          '<label><input type="checkbox" data-idx="' + i + '"> ' + esc(ex.name) + '</label>' +
+          '<span class="extra-price">+ ' + fmt(ex.price) + ' ' + esc(SITE.currency) + '</span>';
+        el.appendChild(div);
+      });
+    } else {
+      title.hidden = true;
+      el.innerHTML = '<p style="color:var(--ink-soft);font-size:.85rem;">لا توجد إضافات لهذا الصنف.</p>';
+    }
+    openOverlay($('#dishModal'));
+  }
+
+  function addFromModal() {
+    if (!modalDish) return;
+    var extras = modalExtras.map(function (i) { return modalDish.extras[i]; }).filter(Boolean);
+    var extrasTotal = extras.reduce(function (s, e) { return s + toNum(e.price); }, 0);
+    state.cart.push({
+      id: 'c' + Date.now() + Math.random().toString(36).slice(2, 6),
+      dishId: modalDish.id,
+      title: modalDish.title,
+      basePrice: toNum(modalDish.price),
+      extras: extras,
+      extrasTotal: extrasTotal,
+      unitPrice: toNum(modalDish.price) + extrasTotal,
+      qty: modalQty
+    });
+    closeOverlay($('#dishModal'));
+    updateCart();
+    showToast('تمت إضافة ' + modalDish.title + ' إلى السلة');
+  }
+
+  /* ====================== نافذة العرض ====================== */
+  function openOfferModal(idx) {
+    idx = toNum(idx);
+    var o = state.offers[idx];
+    if (!o) { showToast('لا يوجد عرض متاح حالياً'); return; }
+    currentOffer = idx;
+    offerQty = 1;
+    $('#offerModalBadge').textContent = o.badge || 'عرض خاص';
+    $('#offerModalTitle').textContent = o.title;
+
+    var ul = $('#offerModalList'), wrap = $('#offerModalItems');
+    ul.innerHTML = '';
+    var items = o.items || [];
+    wrap.hidden = items.length === 0;
+    items.forEach(function (item) {
+      var li = document.createElement('li');
+      li.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px';
+      li.innerHTML = '<span style="color:var(--orange-deep);font-weight:900;font-size:.8rem">\u2714</span> ' + esc(item);
+      ul.appendChild(li);
+    });
+
+    $('#offerModalPrice').textContent = money(o.price);
+    var old = $('#offerModalOldPrice'), sav = $('#offerSavings');
+    if (toNum(o.originalPrice) > 0) {
+      old.textContent = money(o.originalPrice);
+      old.style.display = '';
+      sav.textContent = 'توفر ' + fmt(toNum(o.originalPrice) - toNum(o.price)) + ' ' + SITE.currency + '!';
+    } else {
+      old.textContent = '';
+      old.style.display = 'none';
+      sav.textContent = '';
+    }
+    $('#offerQty').textContent = '1';
+    openOverlay($('#offerModal'));
+  }
+
+  function addOfferToCart() {
+    var o = state.offers[currentOffer];
+    if (!o) return;
+    state.cart.push({
+      id: 'o' + Date.now() + Math.random().toString(36).slice(2, 6),
+      dishId: 'offer',
+      title: '\uD83C\uDF81 ' + o.title,
+      basePrice: toNum(o.price),
+      extras: [], extrasTotal: 0,
+      unitPrice: toNum(o.price),
+      qty: offerQty
+    });
+    closeOverlay($('#offerModal'));
+    updateCart();
+    showToast('تمت إضافة العرض إلى السلة');
+  }
+
+  /* ========================== السلة ========================== */
+  function cartCount() { return state.cart.reduce(function (s, i) { return s + toNum(i.qty); }, 0); }
+  function cartTotal() { return state.cart.reduce(function (s, i) { return s + toNum(i.unitPrice) * toNum(i.qty); }, 0); }
+
+  function updateCart() {
+    var count = cartCount(), total = cartTotal();
+    $('#navBadge').textContent = String(count);
+    $('#bbBadge').textContent  = String(count);
+    $('#cartTotal').textContent = money(total);
+    $('#bbTotal').textContent   = money(total);
+    $('#cartTrigger').setAttribute('aria-label', 'فتح سلة الطلبات — ' + count + ' صنف');
+
+    var c = $('#cartItems');
+    c.innerHTML = '';
+    if (!state.cart.length) {
+      c.innerHTML = '<p class="cart-empty">السلة فارغة حالياً</p>';
+      saveCart();
+      return;
+    }
+    state.cart.forEach(function (item, idx) {
+      var extrasText = (item.extras || []).map(function (e) { return e.name; }).join('، ') || 'بدون إضافات';
+      var div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML =
+        '<div class="ci-info"><h4>' + esc(item.title) + '</h4>' +
+        '<div class="ci-extras">' + esc(extrasText) + '</div>' +
+        '<div class="ci-price">' + money(toNum(item.unitPrice) * toNum(item.qty)) + '</div></div>' +
+        '<div class="ci-controls">' +
+          '<button type="button" class="ci-btn" data-qty="-1" data-idx="' + idx + '" aria-label="إنقاص">\u2212</button>' +
+          '<span class="ci-qty" aria-live="polite">' + toNum(item.qty) + '</span>' +
+          '<button type="button" class="ci-btn" data-qty="1" data-idx="' + idx + '" aria-label="زيادة">+</button>' +
+        '</div>';
+      c.appendChild(div);
+    });
+    saveCart();
+  }
+
+  /* ====================== إرسال الطلب ====================== */
+  function showFormError(msg) {
+    var el = $('#formError');
+    if (msg) { el.textContent = msg; el.classList.add('show'); }
+    else { el.textContent = ''; el.classList.remove('show'); }
+  }
+  function normalizePhone(v) {
+    var d = digits(v);
+    if (d.indexOf('249') === 0) d = d.slice(3);
+    if (d.charAt(0) === '0') d = d.slice(1);
+    return d;
+  }
+  function sendOrder(e) {
+    if (e) e.preventDefault();
+    showFormError('');
+    $('#custName').classList.remove('invalid');
+    $('#custPhone').classList.remove('invalid');
+
+    if (!state.cart.length) { showFormError('أضف أصنافاً إلى السلة أولاً.'); return; }
+
+    var name  = str($('#custName').value);
+    var phone = str($('#custPhone').value);
+    var addr  = str($('#custAddress').value);
+    var pay   = str($('#custPay').value);
+
+    if (name.length < 2) { $('#custName').classList.add('invalid'); showFormError('يرجى كتابة الاسم الكريم.'); $('#custName').focus(); return; }
+    if (normalizePhone(phone).length !== 9) {
+      $('#custPhone').classList.add('invalid');
+      showFormError('رقم الهاتف غير صحيح — الصيغة الصحيحة: 09XXXXXXXX');
+      $('#custPhone').focus();
+      return;
+    }
+
+    var lines = [];
+    lines.push('طلب جديد من مطعم ' + SITE.restaurantName);
+    lines.push('-----------------------------------');
+    lines.push('العميل: ' + name);
+    lines.push('الهاتف: ' + phone);
+    lines.push('العنوان: ' + (addr || 'استلام من المطعم'));
+    lines.push('طريقة الدفع: ' + pay);
+    lines.push('-----------------------------------');
+    lines.push('تفاصيل الطلب:');
+    state.cart.forEach(function (item, i) {
+      var ex = (item.extras || []).length
+        ? ' (' + item.extras.map(function (x) { return x.name; }).join('، ') + ')' : '';
+      lines.push((i + 1) + '. ' + item.title + ex + ' \u00d7 ' + toNum(item.qty) +
+                 ' = ' + money(toNum(item.unitPrice) * toNum(item.qty)));
+    });
+    lines.push('-----------------------------------');
+    lines.push('المجموع الإجمالي: ' + money(cartTotal()));
+
+    var win = window.open(waLink(lines.join('\n')), '_blank', 'noopener');
+    if (!win) {
+      showFormError('المتصفح منع فتح واتساب. اتصل بنا على ' + SITE.phoneDisplay + ' لإتمام الطلب.');
+      return;
+    }
+    showToast('تم تحويل طلبك إلى واتساب');
+  }
+
+  /* ====================== التنبيهات ====================== */
+  var toastTimer = null;
+  function showToast(msg) {
+    var t = $('#toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove('show'); }, 3500);
+  }
+
+  /* ====================== النوافذ المنبثقة ====================== */
+  var lastFocus = null;
+  function openOverlay(el) {
+    if (!el) return;
+    lastFocus = document.activeElement;
+    el.classList.add('active');
+    document.body.classList.add('no-scroll');
+    var f = el.querySelector('.modal-close, .close-cart');
+    if (f) f.focus();
+  }
+  function closeOverlay(el) {
+    if (!el) return;
+    el.classList.remove('active');
+    if (!$$('.modal-overlay.active, .cart-overlay.active').length) {
+      document.body.classList.remove('no-scroll');
+    }
+    if (lastFocus && lastFocus.focus) { try { lastFocus.focus(); } catch (err) {} }
+  }
+
+  /* ====================== Sanity CMS ====================== */
+  var Q = {
+    categories : '*[_type=="category"]{key,title,order}',
+    dishes     : '*[_type=="dish"]{title,sub,description,price,tag,spicy,available,order,imageUrl,"image":image.asset->url,category->{_id,key},extras[]{_ref,"name":@->name,"price":@->price}}',
+    offers     : '*[_type=="offer"]{title,badge,items,price,originalPrice,active,order}',
+    settings   : '*[_type=="siteSettings"][0]'
+  };
+
+  function sanityUrl(query) {
+    return 'https://' + SANITY.projectId + '.api.sanity.io/v' + SANITY.apiVersion +
+           '/data/query/' + SANITY.dataset + '?query=' + encodeURIComponent(query);
+  }
+  function runQuery(query) {
+    return fetch(sanityUrl(query), { headers: { 'Accept': 'application/json' } })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (j) { return j.result; });
+  }
+
+  function mapCategories(rows) {
+    var out = [];
+    (rows || []).forEach(function (c) {
+      if (!c) return;
+      var key = norm(c.key), title = str(c.title);
+      if (!key || !title) { warn('تصنيف ناقص (key أو title) — تم تجاهله'); return; }
+      if (blocked(key) || blocked(title)) { warn('تصنيف مطابق لقائمة البيانات التجريبية — تم تجاهله:', title); return; }
+      out.push({ key: key, title: title, order: toNum(c.order) });
+    });
+    return out.sort(function (a, b) { return a.order - b.order; });
+  }
+
+  function mapDishes(rows, cats) {
+    var keyById = {};
+    (cats || []).forEach(function (c) { keyById[c._id] = c.key; });
+    var out = [];
+    (rows || []).forEach(function (d) {
+      if (!d || d.available === false) return;
+      var title = str(d.title);
+      if (!title)          { warn('صنف بدون اسم — تم تجاهله'); return; }
+      if (blocked(title))  { warn('صنف مطابق لقائمة البيانات التجريبية — تم تجاهله:', title); return; }
+      var price = toNum(d.price);
+      if (price <= 0)      { warn('صنف بدون سعر صالح — تم تجاهله:', title); return; }
+      out.push({
+        id    : str(d._id) || ('dish-' + out.length),
+        title : title,
+        sub   : str(d.sub),
+        cat   : norm(keyById[(d.category || {})._id]) || 'other',
+        price : price,
+        desc  : str(d.description),
+        img   : str(d.imageUrl) || str(d.image),
+        tag   : norm(d.tag),
+        spicy : !!d.spicy,
+        order : toNum(d.order),
+        extras: (d.extras || [])
+          .filter(function (x) { return x && str(x.name) && !blocked(x.name); })
+          .map(function (x) { return { name: str(x.name), price: toNum(x.price) }; })
+      });
+    });
+    return out.sort(function (a, b) { return a.order - b.order; });
+  }
+
+  function mapOffers(rows) {
+    var out = [];
+    (rows || []).forEach(function (o) {
+      if (!o || o.active === false) return;
+      var title = str(o.title);
+      if (!title)         { warn('عرض بدون اسم — تم تجاهله'); return; }
+      if (blocked(title)) { warn('عرض مطابق لقائمة البيانات التجريبية — تم تجاهله:', title); return; }
+      if (toNum(o.price) <= 0) { warn('عرض بدون سعر صالح — تم تجاهله:', title); return; }
+      out.push({
+        title: title,
+        badge: str(o.badge),
+        items: (o.items || []).map(str).filter(Boolean),
+        price: toNum(o.price),
+        originalPrice: toNum(o.originalPrice),
+        order: toNum(o.order)
+      });
+    });
+    return out.sort(function (a, b) { return a.order - b.order; });
+  }
+
+  /* حقول الإعدادات: تُقبل فقط إن كانت صالحة وغير مطابقة لبيانات تجريبية */
+  function pick(current, incoming, minLen) {
+    var v = str(incoming);
+    if (v.length < (minLen || 1)) return current;
+    if (blocked(v)) { warn('قيمة CMS مطابقة لقائمة البيانات التجريبية — تم إبقاء النص المحلي:', JSON.stringify(v)); return current; }
+    return v;
+  }
+
+  function applySettings(s) {
+    if (!s) return;
+    SITE.restaurantName = pick(SITE.restaurantName, s.restaurantName, 3);
+    SITE.address        = pick(SITE.address,        s.address,        6);
+    SITE.heroSubtitle   = pick(SITE.heroSubtitle || '', s.heroSubtitle, 12);
+    SITE.aboutStory     = pick(SITE.aboutStory || '',   s.aboutStory,   40);
+
+    var ph = digits(s.phone);
+    if (ph.length >= 9 && !blocked(s.phone)) SITE.phoneDisplay = str(s.phone);
+    var wa = digits(s.whatsapp);
+    if (wa.length >= 9 && !blocked(s.whatsapp)) SITE.whatsapp = wa;
+
+    if (Array.isArray(s.tickerMessages)) state.cmsTicker = s.tickerMessages.map(str).filter(Boolean);
+    if (Array.isArray(s.workingHours)) {
+      var h = s.workingHours.filter(function (x) { return x && str(x.label) && str(x.hours) && !blocked(x.label) && !blocked(x.hours); })
+                            .map(function (x) { return { label: str(x.label), hours: str(x.hours) }; });
+      if (h.length) SITE.hours = h;
+    }
+    if (Array.isArray(s.paymentMethods)) {
+      var p = s.paymentMethods.map(str).filter(function (x) { return x && !blocked(x); });
+      if (p.length) SITE.payments = p;
+    }
+
+    var sub = $('#heroSub');
+    if (sub && SITE.heroSubtitle) sub.textContent = SITE.heroSubtitle;
+    var story = $('.about-text .story-text');
+    if (story && SITE.aboutStory) story.textContent = SITE.aboutStory;
+  }
+
+  function renderAll() {
+    renderIdentity();
+    renderTicker();
+    renderContact();
+    renderHours();
+    renderSocials();
+    renderPayments();
+    renderFilters();
+    renderMenu();
+    renderOffers();
+  }
+
+  function loadSanity() {
+    if (!SANITY.enabled || typeof fetch !== 'function') {
+      state.dishes = LOCAL_MENU.slice();
+      state.offers = LOCAL_OFFERS.slice();
+      renderAll();
+      return Promise.resolve(false);
+    }
+    return Promise.all([
+      runQuery(Q.categories).catch(function (e) { warn('تعذّر جلب الأقسام:', e.message); return null; }),
+      runQuery(Q.dishes).catch(function (e)     { warn('تعذّر جلب الأصناف:', e.message); return null; }),
+      runQuery(Q.offers).catch(function (e)     { warn('تعذّر جلب العروض:', e.message); return null; }),
+      runQuery(Q.settings).catch(function (e)   { warn('تعذّر جلب الإعدادات:', e.message); return null; })
+    ]).then(function (r) {
+      var cats = mapCategories(r[0]);
+      applySettings(r[3]);
+
+      var dishes = mapDishes(r[1], r[0]);
+      var offers = mapOffers(r[2]);
+
+      /* Sanity هو المصدر الأساسي، والقائمة المحلية بديل عند الطوارئ فقط */
+      state.dishes     = dishes.length ? dishes : LOCAL_MENU.slice();
+      state.offers     = offers.length ? offers : LOCAL_OFFERS.slice();
+      state.categories = cats;
+      state.source     = dishes.length ? 'Sanity' : 'محلي';
+      state.lastSync   = Date.now();
+
+      if (!dishes.length) warn('لا توجد أصناف في Sanity — أضفها من Sanity Studio لتظهر في الموقع.');
+      if (!offers.length) warn('لا توجد عروض صالحة في Sanity — تم إخفاء قسم العروض.');
+
+      /* لو اختفى القسم المُصفّى حالياً نرجع إلى "الكل" */
+      if (state.filter !== 'all' && !state.dishes.some(function (d) { return d.cat === state.filter; })) {
+        state.filter = 'all';
+      }
+      renderAll();
+      return true;
+    });
+  }
+
+  /* ====================== التهيئة والأحداث ====================== */
+  var revealObserver = null;
+
+  function initObservers() {
+    if (typeof IntersectionObserver !== 'function') {
+      $$('.reveal').forEach(function (el) { el.classList.add('in'); });
+      return;
+    }
+    revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); revealObserver.unobserve(en.target); }
+      });
+    }, { threshold: 0.12 });
+    $$('.reveal').forEach(function (el) { revealObserver.observe(el); });
+
+    var linkMap = {};
+    $$('.nav-links a').forEach(function (a) { linkMap[a.getAttribute('href').slice(1)] = a; });
+    var navObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var link = linkMap[en.target.id];
+        if (!link) return;
+        $$('.nav-links a').forEach(function (a) { a.classList.remove('active'); });
+        link.classList.add('active');
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    /* يشمل عنصر التذييل footer#contact وليس أقسام section فقط */
+    $$('section[id], footer[id]').forEach(function (s) { navObserver.observe(s); });
+  }
+
+  function bindEvents() {
+    /* التمرير + زر العودة للأعلى */
+    var header = $('#navbar'), toTop = $('#toTop');
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function () {
+        header.classList.toggle('scrolled', window.scrollY > 10);
+        toTop.classList.toggle('show', window.scrollY > 500);
+        ticking = false;
+      });
+    }, { passive: true });
+    toTop.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+
+    /* قائمة الجوال */
+    var burger = $('#burger'), navLinks = $('#navLinks');
+    burger.addEventListener('click', function () {
+      var open = navLinks.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    $$('#navLinks a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        navLinks.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    /* التصفية */
+    $('#filters').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.filter-btn') : null;
+      if (!b) return;
+      state.filter = b.dataset.filter;
+      renderFilters();
+      renderMenu();
+    });
+
+    /* السلة */
+    $('#cartTrigger').addEventListener('click', function () { openOverlay($('#cartOverlay')); });
+    $('#bbCartBtn').addEventListener('click', function () { openOverlay($('#cartOverlay')); });
+    $('#closeCart').addEventListener('click', function () { closeOverlay($('#cartOverlay')); });
+
+    $('#cartItems').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-qty]') : null;
+      if (!b) return;
+      var idx = parseInt(b.dataset.idx, 10), delta = parseInt(b.dataset.qty, 10);
+      if (!state.cart[idx]) return;
+      state.cart[idx].qty = toNum(state.cart[idx].qty) + delta;
+      if (state.cart[idx].qty <= 0) state.cart.splice(idx, 1);
+      else state.cart[idx].qty = Math.min(99, state.cart[idx].qty);
+      updateCart();
+    });
+
+    $('#orderForm').addEventListener('submit', sendOrder);
+
+    /* نافذة الصنف */
+    $('#dishModalClose').addEventListener('click', function () { closeOverlay($('#dishModal')); });
+    $('#modalMinus').addEventListener('click', function () {
+      modalQty = Math.max(1, modalQty - 1); $('#modalQty').textContent = String(modalQty);
+    });
+    $('#modalPlus').addEventListener('click', function () {
+      modalQty = Math.min(99, modalQty + 1); $('#modalQty').textContent = String(modalQty);
+    });
+    $('#extrasList').addEventListener('change', function (e) {
+      var cb = e.target;
+      if (!cb || cb.type !== 'checkbox') return;
+      var idx = parseInt(cb.dataset.idx, 10);
+      var row = cb.closest('.extra-item');
+      if (cb.checked) {
+        if (modalExtras.indexOf(idx) === -1) modalExtras.push(idx);
+        if (row) row.classList.add('selected');
+      } else {
+        modalExtras = modalExtras.filter(function (i) { return i !== idx; });
+        if (row) row.classList.remove('selected');
+      }
+    });
+    $('#addToCartBtn').addEventListener('click', addFromModal);
+
+    /* نافذة العرض */
+    $('#offerBtn').addEventListener('click', function () { openOfferModal(0); });
+    $('#offerModalClose').addEventListener('click', function () { closeOverlay($('#offerModal')); });
+    $('#offerMinus').addEventListener('click', function () {
+      offerQty = Math.max(1, offerQty - 1); $('#offerQty').textContent = String(offerQty);
+    });
+    $('#offerPlus').addEventListener('click', function () {
+      offerQty = Math.min(99, offerQty + 1); $('#offerQty').textContent = String(offerQty);
+    });
+    $('#addOfferBtn').addEventListener('click', addOfferToCart);
+    $('#offersGrid').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-offer]') : null;
+      if (!b) return;
+      openOfferModal(parseInt(b.dataset.offer, 10));
+    });
+
+    /* الإغلاق بالنقر خارج النافذة أو بمفتاح Escape */
+    [['#dishModal'], ['#offerModal'], ['#cartOverlay']].forEach(function (pair) {
+      var el = $(pair[0]);
+      el.addEventListener('click', function (e) { if (e.target === el) closeOverlay(el); });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' && e.keyCode !== 27) return;
+      $$('.modal-overlay.active, .cart-overlay.active').forEach(closeOverlay);
+      if (navLinks.classList.contains('open')) {
+        navLinks.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  function init() {
+    state.cart = loadCart();
+    bindEvents();
+    initObservers();
+
+    /* عرض أولي فوري بالبيانات المحلية ريثما يصل الرد من Sanity */
+    state.dishes = LOCAL_MENU.slice();
+    state.offers = LOCAL_OFFERS.slice();
+    renderAll();
+    updateCart();
+
+    if (!state.dishes.length && SANITY.enabled) {
+      var grid = $('#menuGrid');
+      if (grid) { grid.innerHTML = ''; for (var i = 0; i < 6; i++) grid.appendChild(skeleton()); }
+    }
+
+    loadSanity().then(function () { updateCart(); });
+
+    /* مزامنة خفيفة: عند العودة للتبويب بعد 5 دقائق فقط — بلا استنزاف للشبكة */
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState !== 'visible') return;
+      if (Date.now() - state.lastSync < 5 * 60 * 1000) return;
+      loadSanity();
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
 </script>
 </body>
 </html>
