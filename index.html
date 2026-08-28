@@ -148,10 +148,26 @@
     color:#FDF8F3;font-size:.85rem;overflow:hidden;white-space:nowrap;
     border-bottom:1px solid rgba(230,126,77,.25);
   }
-  .ticker-inner{display:inline-block;padding:8px 0;animation:tick 32s linear infinite}
-  .ticker-inner span{margin:0 28px}
+  .ticker-inner{
+    display:flex;width:max-content;
+    padding:8px 0;
+    animation:tick var(--ticker-duration,36s) linear infinite;
+    will-change:transform;
+    direction:ltr;
+  }
+  .ticker-group{
+    display:flex;align-items:center;justify-content:center;
+    flex:0 0 max-content;min-width:50vw;
+    direction:rtl;
+  }
+  .ticker-inner span{
+    display:inline-block;flex:0 0 auto;
+    margin:0 28px;white-space:nowrap;
+  }
   .ticker b{color:var(--orange-soft)}
-  @keyframes tick{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+  .ticker:hover .ticker-inner{animation-play-state:paused}
+  @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @media(prefers-reduced-motion:reduce){.ticker-inner{animation:none;transform:none!important}}
 
   /* ===== Hero (immersive image hero) ===== */
   .hero{
@@ -758,12 +774,20 @@
 </svg>
 
 <!-- Ticker -->
-<div class="ticker">
+<div class="ticker" aria-label="الإعلانات">
   <div class="ticker-inner">
-    <span>مطعم <b>مشوي للأسماك واللحوم</b> &middot; أجود الأصناف الطازجة</span>
-    <span>المشاوي تُشوى طازجة على الفحم أمامك</span>
-    <span><b>توصيل مجاني</b> للطلبات فوق 30,000 ج.س داخل أم درمان</span>
-    <span>للاستفسار والحجز: <b id="tickerPhone">0116642510</b></span>
+    <div class="ticker-group">
+      <span>مطعم <b>مشوي للأسماك واللحوم</b> &middot; أجود الأصناف الطازجة</span>
+      <span>المشاوي تُشوى طازجة على الفحم أمامك</span>
+      <span><b>توصيل مجاني</b> للطلبات فوق 30,000 ج.س داخل أم درمان</span>
+      <span>للاستفسار والحجز: <b id="tickerPhone" class="ticker-phone">0116642510</b></span>
+    </div>
+    <div class="ticker-group" aria-hidden="true">
+      <span>مطعم <b>مشوي للأسماك واللحوم</b> &middot; أجود الأصناف الطازجة</span>
+      <span>المشاوي تُشوى طازجة على الفحم أمامك</span>
+      <span><b>توصيل مجاني</b> للطلبات فوق 30,000 ج.س داخل أم درمان</span>
+      <span>للاستفسار والحجز: <b class="ticker-phone">0116642510</b></span>
+    </div>
   </div>
 </div>
 
@@ -1121,14 +1145,22 @@ function cleanStrings(arr){ return (arr || []).filter(function(s){ return !isDem
 
 function sanityQuery(query) {
   var url = SANITY_API + '?query=' + encodeURIComponent(query);
-  return fetch(url).then(function(r){return r.json()}).then(function(d){return d.result}).catch(function(e){console.warn('⚠️ Sanity fetch failed:',e);return null});
+  /* لا نستخدم نتيجة قديمة من كاش المتصفح بعد الحفظ من لوحة التحكم. */
+  return fetch(url,{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){return d.result}).catch(function(e){console.warn('⚠️ Sanity fetch failed:',e);return null});
 }
 
 function transformDishes(dishes, categories) {
   var catMap = {};
-  categories.forEach(function(c){catMap[c._id]=c.key});
+  (categories || []).forEach(function(c){
+    if(!c) return;
+    if(c._id && c.key) catMap[c._id] = c.key;
+    if(c._ref && c.key) catMap[c._ref] = c.key;
+  });
   return dishes.filter(function(d){return d.available!==false && !isDemoItem(d)}).sort(function(a,b){return(a.order||0)-(b.order||0)}).map(function(d,i){
-    var catKey = catMap[(d.category||{})._ref] || 'fish';
+    /* category->{_id,key} returns _id, not _ref. Supporting both shapes keeps
+       the mapping correct if the query is changed back to an unresolved ref. */
+    var relation = d.category || {};
+    var catKey = relation.key || catMap[relation._id] || catMap[relation._ref] || catMap[relation] || 'fish';
     var extras=(d.extras||[]).filter(function(ex){return ex && ex.name && !isDemoText(ex.name)}).map(function(ex){return{name:ex.name,price:ex.price}});
     return{id:i+1,title:d.title,sub:d.sub||'',cat:catKey,price:d.price,desc:d.description||'',img:d.imageUrl||d.image||'',tag:d.tag||'',spicy:d.spicy||false,extras:extras};
   });
@@ -1138,13 +1170,57 @@ function transformCategories(cats){return cats.filter(function(c){return c && !i
 
 function transformOffers(offers){return offers.filter(function(o){return o.active!==false && !isDemoItem(o)}).map(function(o){return{title:o.title,badge:o.badge||'',items:cleanStrings(o.items),price:o.price,originalPrice:o.originalPrice||null,img:o.imageUrl||o.image||''}})}
 
-function storyToString(v){
-  if(!v) return '';
-  if(typeof v==='string') return v;
-  if(Array.isArray(v)) return v.map(function(b){return (b&&(b.text||b.code))||''}).join('\n');
-  return String(v);
+/* يحوّل النصوص العادية وPortable Text القادمة من Sanity إلى نص قابل للعرض. */
+function sanityText(v){
+  if(v == null) return '';
+  if(typeof v === 'string' || typeof v === 'number') return String(v);
+  if(Array.isArray(v)) return v.map(function(item){return sanityText(item)}).filter(Boolean).join('\n');
+  if(typeof v === 'object'){
+    if(v.current != null) return sanityText(v.current);
+    if(v.value != null) return sanityText(v.value);
+    if(v.text != null) return sanityText(v.text);
+    if(Array.isArray(v.children)) return v.children.map(function(child){return sanityText(child)}).join('');
+    if(Array.isArray(v.blocks)) return sanityText(v.blocks);
+  }
+  return '';
 }
-function transformSettings(s){if(!s)return null;return{heroTitle:s.heroTitle||'',heroSubtitle:s.heroSubtitle||'',aboutStory:storyToString(s.aboutStory),tickerMessages:cleanStrings(s.tickerMessages),workingHours:(s.workingHours||[]).filter(function(h){return h && !isDemoText(h.label) && !isDemoText(h.hours)}),paymentMethods:cleanStrings(s.paymentMethods)}}
+function storyToString(v){return sanityText(v)}
+function settingText(s,keys){
+  for(var i=0;i<keys.length;i++){
+    if(Object.prototype.hasOwnProperty.call(s,keys[i])){
+      var value=sanityText(s[keys[i]]).trim();
+      if(value) return value;
+    }
+  }
+  return '';
+}
+function hasSetting(s,keys){
+  return keys.some(function(key){return Object.prototype.hasOwnProperty.call(s,key)});
+}
+function transformSettings(s){
+  if(!s)return null;
+  var titleKeys=['heroTitle','title','siteTitle'];
+  var subtitleKeys=['heroSubtitle','subtitle','siteSubtitle'];
+  var addressKeys=['address','location'];
+  var phoneKeys=['phone','telephone'];
+  var whatsappKeys=['whatsapp','whatsApp'];
+  return{
+    heroTitle:settingText(s,titleKeys),
+    heroTitleConfigured:hasSetting(s,titleKeys),
+    heroSubtitle:settingText(s,subtitleKeys),
+    heroSubtitleConfigured:hasSetting(s,subtitleKeys),
+    address:settingText(s,addressKeys),
+    addressConfigured:hasSetting(s,addressKeys),
+    phone:settingText(s,phoneKeys),
+    phoneConfigured:hasSetting(s,phoneKeys),
+    whatsapp:settingText(s,whatsappKeys),
+    whatsappConfigured:hasSetting(s,whatsappKeys),
+    aboutStory:storyToString(s.aboutStory),
+    tickerMessages:cleanStrings(s.tickerMessages),
+    workingHours:(s.workingHours||[]).filter(function(h){return h && !isDemoText(h.label) && !isDemoText(h.hours)}),
+    paymentMethods:cleanStrings(s.paymentMethods)
+  };
+}
 
 var QUERIES={
   categories:'*[_type=="category"]|order(order asc)',
@@ -1174,8 +1250,26 @@ function applySanityData(data){
   if(data.settings&&data.settings.paymentMethods&&data.settings.paymentMethods.length>0)updatePaymentMethods(data.settings.paymentMethods);
   if(data.settings&&data.settings.workingHours&&data.settings.workingHours.length>0)updateWorkingHours(data.settings.workingHours);
   if(data.settings){
-    if(data.settings.heroTitle){var h=document.querySelector('.hero h1');if(h)h.textContent=data.settings.heroTitle}
-    if(data.settings.heroSubtitle){var p=document.querySelector('.hero p');if(p)p.textContent=data.settings.heroSubtitle}
+    /* مزامنة بيانات التواصل حتى يظهر العنوان الجديد في التذييل والاتصالات. */
+    var siteInfoChanged=false;
+    if(data.settings.addressConfigured && data.settings.address){SITE.address=data.settings.address;siteInfoChanged=true;}
+    if(data.settings.phoneConfigured && data.settings.phone){SITE.phone=data.settings.phone;siteInfoChanged=true;}
+    if(data.settings.whatsappConfigured && data.settings.whatsapp){SITE.whatsapp=data.settings.whatsapp;siteInfoChanged=true;}
+    if(siteInfoChanged)syncSiteInfo();
+
+    /* يدعم title وheroTitle حتى ينعكس التعديل من لوحة التحكم على العنوان المرئي وعنوان التبويب. */
+    if(data.settings.heroTitleConfigured && data.settings.heroTitle){
+      var h=document.querySelector('.hero h1');
+      if(h){
+        h.textContent=data.settings.heroTitle;
+        h.setAttribute('aria-label',data.settings.heroTitle);
+      }
+      document.title=data.settings.heroTitle+' | شواء على الفحم — أم درمان';
+    }
+    if(data.settings.heroSubtitleConfigured && data.settings.heroSubtitle){
+      var p=document.querySelector('.hero p');
+      if(p)p.textContent=data.settings.heroSubtitle;
+    }
   }
   if(data.settings&&data.settings.aboutStory){
     var ap=document.querySelector('.about-block .story-text');
@@ -1199,7 +1293,27 @@ function updateCategoryFilters(cats){
   f.querySelectorAll('.filter-btn').forEach(function(btn){btn.addEventListener('click',function(){f.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');var fl=btn.dataset.filter;if(fl==='all')renderMenu(window.menu);else renderMenu(window.menu.filter(function(d){return d.cat===fl}))})});
 }
 
-function updateTicker(msgs){var inner=document.querySelector('.ticker-inner');if(!inner)return;var h='';msgs.forEach(function(m){h+='<span>'+esc(m)+'</span>'});inner.innerHTML=h}
+function setTickerDuration(){
+  var inner=document.querySelector('.ticker-inner');
+  var group=inner&&inner.querySelector('.ticker-group');
+  if(!inner||!group)return;
+  /* كلما زاد طول الإعلان زاد الزمن حتى لا تمر الكلمات بسرعة أو تُقص بصرياً. */
+  var seconds=Math.max(28,Math.min(90,group.scrollWidth/55));
+  inner.style.setProperty('--ticker-duration',seconds+'s');
+}
+function updateTicker(msgs){
+  var inner=document.querySelector('.ticker-inner');
+  if(!inner)return;
+  var content='';
+  (msgs||[]).forEach(function(m){
+    var text=sanityText(m).trim();
+    if(text)content+='<span>'+esc(text)+'</span>';
+  });
+  if(!content)return;
+  /* نسختان متطابقتان تمنعان انقطاع آخر كلمة عند إعادة بدء الحركة. */
+  inner.innerHTML='<div class="ticker-group">'+content+'</div><div class="ticker-group" aria-hidden="true">'+content+'</div>';
+  setTickerDuration();
+}
 
 function updateOffers(offers){
   window._allOffers=offers;
@@ -1663,8 +1777,7 @@ document.addEventListener('keydown',function(e){
 
 // مزامنة معلومات المطعم من كائن SITE (مصدر واحد)
 function syncSiteInfo(){
-  var tp = document.getElementById('tickerPhone');
-  if(tp) tp.textContent = SITE.phone;
+  document.querySelectorAll('.ticker-phone').forEach(function(tp){tp.textContent=SITE.phone});
   var ul = document.getElementById('contactList');
   if(ul){
     ul.innerHTML =
@@ -1684,6 +1797,8 @@ async function initSanity() {
 
 // Init
 syncSiteInfo();
+setTickerDuration();
+window.addEventListener('resize',setTickerDuration);
 loadCart();
 updateCart();
 showMenuLoading();
