@@ -1126,9 +1126,16 @@ function sanityQuery(query) {
 
 function transformDishes(dishes, categories) {
   var catMap = {};
-  categories.forEach(function(c){catMap[c._id]=c.key});
+  (categories || []).forEach(function(c){
+    if(!c) return;
+    if(c._id && c.key) catMap[c._id] = c.key;
+    if(c._ref && c.key) catMap[c._ref] = c.key;
+  });
   return dishes.filter(function(d){return d.available!==false && !isDemoItem(d)}).sort(function(a,b){return(a.order||0)-(b.order||0)}).map(function(d,i){
-    var catKey = catMap[(d.category||{})._ref] || 'fish';
+    /* category->{_id,key} returns _id, not _ref. Supporting both shapes keeps
+       the mapping correct if the query is changed back to an unresolved ref. */
+    var relation = d.category || {};
+    var catKey = relation.key || catMap[relation._id] || catMap[relation._ref] || catMap[relation] || 'fish';
     var extras=(d.extras||[]).filter(function(ex){return ex && ex.name && !isDemoText(ex.name)}).map(function(ex){return{name:ex.name,price:ex.price}});
     return{id:i+1,title:d.title,sub:d.sub||'',cat:catKey,price:d.price,desc:d.description||'',img:d.imageUrl||d.image||'',tag:d.tag||'',spicy:d.spicy||false,extras:extras};
   });
