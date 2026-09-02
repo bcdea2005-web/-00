@@ -380,10 +380,10 @@
   .dish:hover::before{opacity:1}
 
   .dish-img{
-    width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,#FBF4EE,#F0E6D2);
+    width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#FBF4EE,#F0E6D2);
     position:relative;overflow:hidden;
   }
-  .dish-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+  .dish-img img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .5s}
   .dish:hover .dish-img img{transform:scale(1.06)}
   .dish-img-fallback{
     position:absolute;inset:0;display:grid;place-items:center;
@@ -510,7 +510,7 @@
   }
   .modal-close:hover{background:var(--burgundy)}
   .modal-img{
-    width:100%;height:220px;object-fit:cover;
+    width:100%;height:260px;object-fit:cover;object-position:center;
     border-radius:var(--r-lg) var(--r-lg) 0 0;
     background:linear-gradient(135deg,#FBF4EE,#F0E6D2);
   }
