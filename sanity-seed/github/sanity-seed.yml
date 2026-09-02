@@ -1,0 +1,49 @@
+name: رفع أصناف القائمة إلى Sanity
+
+# يُشغَّل يدوياً فقط من تبويب Actions → «رفع أصناف القائمة إلى Sanity» → Run workflow.
+# يحتاج Secret باسم SANITY_TOKEN (رمز بصلاحية Editor من sanity.io/manage → API → Tokens).
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'اكتب yes للتنفيذ الفعلي (أي قيمة أخرى = معاينة فقط)'
+        required: true
+        default: 'preview'
+      force:
+        description: 'إعادة كتابة الأطباق الموجودة (يمسح تعديلاتك في اللوحة) — اتركه false'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: التحقق من وجود الرمز
+        env:
+          SANITY_TOKEN: ${{ secrets.SANITY_TOKEN }}
+        run: |
+          if [ -z "$SANITY_TOKEN" ]; then
+            echo "::error::لم يُضبط SANITY_TOKEN. أضفه من Settings → Secrets and variables → Actions → New repository secret"
+            exit 1
+          fi
+
+      - name: معاينة / تنفيذ
+        env:
+          SANITY_TOKEN: ${{ secrets.SANITY_TOKEN }}
+          CONFIRM: ${{ github.event.inputs.confirm }}
+          FORCE: ${{ github.event.inputs.force }}
+        run: |
+          ARGS=""
+          if [ "$CONFIRM" = "yes" ]; then ARGS="--yes"; fi
+          if [ "$FORCE" = "true" ]; then ARGS="$ARGS --force"; fi
+          echo "تشغيل: node sanity-seed/upload.mjs $ARGS"
+          node sanity-seed/upload.mjs $ARGS
