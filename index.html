@@ -8,7 +8,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23E67E4D'/%3E%3Cstop offset='1' stop-color='%237A1F1F'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M32 14c-2 0-3 1.5-5 1.5-3 0-4.5 2-4.5 4.5 0 5 2.5 7.5 3.5 12 .5 2.5 4 2.5 4.5-.1.4-1.7.9-3.5 2-3.5s1.6 1.8 2 3.5c.5 2.6 4 2.6 4.5.1 1-4.5 3.5-7 3.5-12 0-2.5-1.5-4.5-4.5-4.5-2 0-3-1.5-5-1.5z' fill='%23FFFDF6'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root{
     /* ===== Warm cream / burgundy / burnt orange palette (alRomansiah-inspired) ===== */
@@ -107,6 +107,7 @@
   .logo-text{display:flex;flex-direction:column;line-height:1.2}
   .logo-text .l1{font-size:1.1rem;font-weight:900;color:var(--burgundy);letter-spacing:.3px}
   .logo-text .l2{font-size:.8rem;font-weight:700;color:var(--orange-deep);letter-spacing:.5px}
+  .logo .logo-svg{height:56px;width:auto;display:block;flex:none}
 
   .nav-links{display:flex;gap:4px;align-items:center}
   .nav-links a{
@@ -732,6 +733,7 @@
   }
   @media(max-width:520px){
     .footer-grid{grid-template-columns:1fr}
+    .logo .logo-svg{height:44px}
     .logo-text .l1{font-size:.95rem}
     .logo-text .l2{font-size:.72rem}
     .bottom-bar{padding:8px 14px;gap:8px}
@@ -795,8 +797,38 @@
 <header id="navbar">
   <nav>
     <a class="logo" href="#home">
-      <span class="brand-mark"><svg><use href="#i-flame"/></svg></span>
-      <span class="logo-text"><span class="l1">مشوي</span><span class="l2">للأسماك واللحوم</span></span>
+<svg class="logo-svg" viewBox="0 0 400 400" role="img" aria-label="مشوي للأسماك واللحوم">
+<circle cx="202" cy="217" r="182" fill="#FFFFFF"/>
+<path d="M 56.5 133 A 168 168 0 0 1 149.6 57.4" stroke="#D8261C" stroke-width="11" fill="none" stroke-linecap="round"/>
+<path d="M 254.4 57.4 A 168 168 0 0 1 353.7 142.8" stroke="#D8261C" stroke-width="11" fill="none" stroke-linecap="round"/>
+<g transform="translate(202 91) rotate(0) scale(1.15)"><path d="M0 14 C -20 -10 -30 -40 -8 -68 C -10 -50 4 -40 8 -20 C 14 -32 18 -22 16 -10 C 24 -20 18 4 0 14 Z" fill="#E8401F"/><path d="M0 8 C -12 -10 -18 -28 -4 -50 C -6 -36 2 -28 4 -14 C 8 -22 12 -14 10 -4 C 16 -10 12 4 0 8 Z" fill="#FB8C00"/><path d="M0 4 C -6 -8 -10 -20 -2 -36 C -3 -24 2 -18 2 -8 C 4 -14 6 -8 5 0 C 8 -4 6 4 0 4 Z" fill="#FFC93C"/></g>
+<g transform="translate(34 170) rotate(24) scale(0.92)"><path d="M0 14 C -20 -10 -30 -40 -8 -68 C -10 -50 4 -40 8 -20 C 14 -32 18 -22 16 -10 C 24 -20 18 4 0 14 Z" fill="#E8401F"/><path d="M0 8 C -12 -10 -18 -28 -4 -50 C -6 -36 2 -28 4 -14 C 8 -22 12 -14 10 -4 C 16 -10 12 4 0 8 Z" fill="#FB8C00"/><path d="M0 4 C -6 -8 -10 -20 -2 -36 C -3 -24 2 -18 2 -8 C 4 -14 6 -8 5 0 C 8 -4 6 4 0 4 Z" fill="#FFC93C"/></g>
+<line x1="163" y1="168" x2="274" y2="122" stroke="#151515" stroke-width="5" stroke-linecap="round"/>
+<path d="M 274 118 L 287 113 L 280 127 Z" fill="#151515"/>
+<g transform="translate(180 159) rotate(-22.5)"><rect x="-16.5" y="-13" width="33" height="26" rx="6" fill="#D8261C"/><path d="M -15 -4 H 15 M -15 5 H 15" stroke="#8E1408" stroke-width="3"/></g><g transform="translate(212 146) rotate(-22.5)"><rect x="-16.5" y="-13" width="33" height="26" rx="6" fill="#D8261C"/><path d="M -15 -4 H 15 M -15 5 H 15" stroke="#8E1408" stroke-width="3"/></g><g transform="translate(244 133) rotate(-22.5)"><rect x="-16.5" y="-13" width="33" height="26" rx="6" fill="#D8261C"/><path d="M -15 -4 H 15 M -15 5 H 15" stroke="#8E1408" stroke-width="3"/></g>
+<circle cx="339" cy="213" r="55" fill="#151515"/>
+<g transform="translate(340 213) scale(1.12) translate(-340 -213)">
+<path d="M 314 213 Q 338 192 368 208 Q 375 213 368 218 Q 338 234 314 213 Z" fill="#fff"/>
+<path d="M 318 213 L 298 200 L 305 213 L 298 226 Z" fill="#fff"/>
+<path d="M 320 213 H 362" stroke="#151515" stroke-width="2.5"/>
+<path d="M 328 203 L 332 213 L 328 223 M 337 202 L 341 213 L 337 224 M 346 203 L 350 213 L 346 223" stroke="#151515" stroke-width="2" fill="none"/>
+<circle cx="357" cy="208.5" r="3" fill="#151515"/>
+</g>
+<text x="152" y="229" text-anchor="middle" font-family="Lalezar,Tajawal,sans-serif" font-size="100" fill="#151515">مشوي</text>
+<rect x="38" y="292" width="17" height="11" rx="3" fill="#E8401F" transform="rotate(-18 46 297)"/>
+<rect x="60" y="300" width="13" height="9" rx="3" fill="#FB8C00" transform="rotate(-10 66 304)"/>
+<path d="M 44.5 308 A 182 182 0 0 0 359.5 308 L 305.9 277 A 120 120 0 0 1 98.4 277 Z" fill="#151515"/>
+<text x="202" y="373" text-anchor="middle" font-family="Tajawal,sans-serif" font-weight="700" font-size="22" fill="#fff">للأسماك واللحوم</text>
+<path d="M 140 384 Q 202 392 264 384" stroke="#fff" stroke-width="2" fill="none" opacity=".75"/>
+<ellipse cx="106" cy="306" rx="42" ry="26" fill="#D8261C"/>
+<path d="M 84 288 Q 80 306 84 324 M 102 283 Q 98 306 102 329 M 120 285 Q 116 306 120 327 M 136 290 Q 133 306 136 322" stroke="#7F1008" stroke-width="3.5" fill="none"/>
+<rect x="272" y="298" width="56" height="20" rx="8" fill="#D8261C"/>
+<path d="M 283 299 V 317 M 295 299 V 317 M 307 299 V 317 M 319 299 V 317" stroke="#8E1408" stroke-width="3"/>
+<line x1="16" y1="309" x2="374" y2="309" stroke="#151515" stroke-width="5"/>
+<path d="M 16 304 L 2 309 L 16 314 Z" fill="#151515"/>
+<path d="M 374 304 L 388 309 L 374 314 Z" fill="#151515"/>
+<path d="M 10 250 L 26 268 M 3 266 L 19 284 M 352 250 L 368 268" stroke="#151515" stroke-width="7" stroke-linecap="round"/>
+</svg>
     </a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#home" class="active">الرئيسية</a></li>
