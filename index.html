@@ -1126,6 +1126,7 @@ function fmtPrice(n){
    يحترم القص (crop) من Sanity Studio ويبني URL عبر Sanity CDN.
    إذا لم يكن قص، يرجع الصورة الأصلية. */
 function buildCroppedImageUrl(img) {
+  console.log('[CROP] img type:', typeof img, 'has asset:', !!(img && img.asset), 'has crop:', !!(img && img.crop));
   if (!img) return '';
   // إذا كان نص عادي (URL مباشر — من imageUrl القديم)
   if (typeof img === 'string') return img;
