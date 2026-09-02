@@ -17,6 +17,7 @@
  *   --project <id>    افتراضي: 197665fs
  *   --dataset <name>  افتراضي: production
  *   --force           إعادة كتابة الأطباق الموجودة (createOrReplace) — احذر: يمسح تعديلات اللوحة
+ *   --patch-images    يحدّث صور الأطباق الموجودة فقط (patch) — لا يمسّ الأسعار أو التعديلات الأخرى
  *
  * لا يحتاج أي تثبيت (npm install) — يعتمد على fetch المدمج في Node 18+.
  */
@@ -37,6 +38,7 @@ const dataset = arg('dataset', process.env.SANITY_DATASET || 'production');
 const token = arg('token', process.env.SANITY_TOKEN) || '';
 const confirmed = argv.includes('--yes');
 const force = argv.includes('--force');
+const patchImages = argv.includes('--patch-images');
 const apiVersion = '2024-01-01';
 const base = process.env.SANITY_API_BASE || `https://${projectId}.api.sanity.io/v${apiVersion}`;
 
@@ -126,7 +128,7 @@ const existingExtraIds = new Set(await query('*[_type=="extra" && _id in $ids]._
 log(`\nالمشروع: ${projectId} / ${dataset}`);
 log(`الصور:   ${imageFiles.length} ملف — ${imageFiles.filter((f) => assetByFile[f]).length} مرفوعة مسبقاً، ${imageFiles.filter((f) => !assetByFile[f]).length} سترفع الآن`);
 log(`الإضافات: ${teaExtras.length} — ${teaExtras.filter((e) => existingExtraIds.has(e._id)).length} موجودة، ${teaExtras.filter((e) => !existingExtraIds.has(e._id)).length} ستُنشأ`);
-log(`الأطباق: ${dishes.length} — ${dishes.filter((d) => existingDishIds.has(d._id)).length} موجودة، ${dishes.filter((d) => !existingDishIds.has(d._id)).length} ستُنشأ${force ? ' (وضع --force: ستُستبدل الموجودة أيضاً)' : ''}\n`);
+log(`الأطباق: ${dishes.length} — ${dishes.filter((d) => existingDishIds.has(d._id)).length} موجودة، ${dishes.filter((d) => !existingDishIds.has(d._id)).length} ستُنشأ${force ? ' (وضع --force: ستُستبدل الموجودة أيضاً)' : ''}${patchImages ? ' (وضع --patch-images: ستُحدّث صور الموجودة فقط)' : ''}\n`);
 
 const byCat = {};
 for (const d of dishes) {
@@ -172,7 +174,17 @@ for (const d of dishes) {
   if (doc._id === 'dish-tea-red') {
     doc.extras = teaExtras.map((e) => ({ _type: 'reference', _ref: e._id, _key: e._id }));
   }
-  mutations.push(force ? { createOrReplace: doc } : { createIfNotExists: doc });
+  if (patchImages && existingDishIds.has(d._id) && doc.image) {
+    // حدّث الصورة فقط — لا يمسّ السعر أو الوصف أو أي تعديل من لوحة التحكم
+    mutations.push({
+      patch: {
+        id: doc._id,
+        set: { image: doc.image },
+      },
+    });
+  } else {
+    mutations.push(force ? { createOrReplace: doc } : { createIfNotExists: doc });
+  }
 }
 
 log(`\n📝 كتابة ${mutations.length} مستند…`);
