@@ -1130,7 +1130,7 @@ function buildCroppedImageUrl(img) {
   // إذا كان نص عادي (URL مباشر — من imageUrl القديم)
   if (typeof img === 'string') return img;
   var asset = img.asset;
-  if (!asset) return '';
+  if (!asset) { console.warn('[CROP DEBUG] no asset in:', JSON.stringify(img).slice(0,300)); return ''; }
   // إذا كان عندنا URL جاهز (من asset->url) بدون crop
   var baseUrl = asset.url || '';
   if (!baseUrl && asset._id) {
@@ -1145,6 +1145,7 @@ function buildCroppedImageUrl(img) {
   var crop = img.crop;
   if (!crop) return baseUrl + '?auto=format&w=800';
   var top = crop.top || 0, bottom = crop.bottom || 0, left = crop.left || 0, right = crop.right || 0;
+  console.log('[CROP DEBUG] crop:', JSON.stringify(crop), 'asset._id:', asset._id);
   // Sanity crop values: 0 means no crop on that side
   if (top === 0 && bottom === 0 && left === 0 && right === 0) return baseUrl + '?auto=format&w=800';
   // استخراج أبعاد الصورة الأصلية من _id
