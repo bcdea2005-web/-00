@@ -1122,6 +1122,44 @@ function fmtPrice(n){
   return v.toLocaleString('en-US');
 }
 
+/* ====== Sanity Image URL with crop support ======
+   يحترم القص (crop) من Sanity Studio ويبني URL عبر Sanity CDN.
+   إذا لم يكن قص، يرجع الصورة الأصلية. */
+function buildCroppedImageUrl(img) {
+  if (!img) return '';
+  // إذا كان نص عادي (URL مباشر — من imageUrl القديم)
+  if (typeof img === 'string') return img;
+  var asset = img.asset;
+  if (!asset) return '';
+  // إذا كان عندنا URL جاهز (من asset->url) بدون crop
+  var baseUrl = asset.url || '';
+  if (!baseUrl && asset._id) {
+    // نبني URL من _id: image-{hash}-{w}x{h}-{ext}
+    var m = asset._id.match(/^image-([a-zA-Z0-9]+)-(\d+x\d+)-(\w+)$/);
+    if (m) {
+      baseUrl = 'https://cdn.sanity.io/images/' + SANITY_CONFIG.projectId + '/' + SANITY_CONFIG.dataset + '/' + m[1] + '-' + m[2] + '.' + m[3];
+    }
+  }
+  if (!baseUrl) return '';
+  // إذا ما فيه crop → أرجع URL مع تحسين
+  var crop = img.crop;
+  if (!crop) return baseUrl + '?auto=format&w=800';
+  var top = crop.top || 0, bottom = crop.bottom || 0, left = crop.left || 0, right = crop.right || 0;
+  // Sanity crop values: 0 means no crop on that side
+  if (top === 0 && bottom === 0 && left === 0 && right === 0) return baseUrl + '?auto=format&w=800';
+  // استخراج أبعاد الصورة الأصلية من _id
+  var dims = (asset._id || '').match(/(\d+)x(\d+)/);
+  if (!dims) return baseUrl + '?auto=format&w=800';
+  var origW = parseInt(dims[1]), origH = parseInt(dims[2]);
+  // حساب rect بالبكسل: left, top, width, height
+  var rectX = Math.round(left * origW);
+  var rectY = Math.round(top * origH);
+  var rectW = Math.round((1 - left - right) * origW);
+  var rectH = Math.round((1 - top - bottom) * origH);
+  if (rectW <= 0 || rectH <= 0) return baseUrl + '?auto=format&w=800';
+  return baseUrl + '?rect=' + rectX + ',' + rectY + ',' + rectW + ',' + rectH + '&auto=format&w=800';
+}
+
 /* السعر غير محدد بعد (0 أو فارغ في لوحة التحكم) → نعرض «السعر عند الطلب» بدل «0 ج.س». */
 var PRICE_ON_REQUEST = 'السعر عند الطلب';
 function hasPrice(n){
@@ -1173,7 +1211,7 @@ function transformDishes(dishes, categories) {
     var relation = d.category || {};
     var catKey = relation.key || catMap[relation._id] || catMap[relation._ref] || catMap[relation] || 'fish';
     var extras=(d.extras||[]).filter(function(ex){return ex && ex.name && !isDemoText(ex.name)}).map(function(ex){return{name:ex.name,price:ex.price}});
-    return{id:i+1,title:d.title,sub:d.sub||'',cat:catKey,price:d.price,desc:d.description||'',img:d.imageUrl||d.image||'',tag:d.tag||'',spicy:d.spicy||false,extras:extras};
+    return{id:i+1,title:d.title,sub:d.sub||'',cat:catKey,price:d.price,desc:d.description||'',img:buildCroppedImageUrl(d.image)||d.imageUrl||'',tag:d.tag||'',spicy:d.spicy||false,extras:extras};
   });
 }
 
@@ -1236,7 +1274,7 @@ function transformSettings(s){
 var QUERIES={
   categories:'*[_type=="category"]|order(order asc)',
   extras:'*[_type=="extra"]',
-  dishes:'*[_type=="dish"]|order(order asc){...,"imageUrl":imageUrl,"image":image.asset->url,category->{_id,key},extras[]{_ref,"name":@->name,"price":@->price}}',
+  dishes:'*[_type=="dish"]|order(order asc){...,"imageUrl":imageUrl,"image":image{_type,asset->{_id,url},crop,hotspot},category->{_id,key},extras[]{_ref,"name":@->name,"price":@->price}}',
   offers:'*[_type=="offer"&&active==true]{...,"imageUrl": image.asset->url}',
   settings:'*[_type=="siteSettings"][0]'
 };
