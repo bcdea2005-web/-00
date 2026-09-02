@@ -411,6 +411,7 @@
   .dish-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto}
   .price{font-size:1.25rem;font-weight:900;color:var(--burgundy);white-space:nowrap}
   .price small{font-size:.72rem;font-weight:600;color:var(--ink-soft);margin-right:4px}
+  .price.price-tbd{font-size:.88rem;font-weight:800;color:var(--orange-deep);background:rgba(230,126,77,.10);border:1px dashed rgba(230,126,77,.45);border-radius:99px;padding:4px 12px}
   .tag{font-size:.72rem;font-weight:800;padding:5px 12px;border-radius:99px;white-space:nowrap}
   .tag.hot{background:linear-gradient(135deg,#F4A574,#E67E4D);color:#fff}
   .tag.fresh{background:linear-gradient(135deg,#7DD3E8,#4FB3D9);color:#fff}
@@ -1121,6 +1122,16 @@ function fmtPrice(n){
   return v.toLocaleString('en-US');
 }
 
+/* السعر غير محدد بعد (0 أو فارغ في لوحة التحكم) → نعرض «السعر عند الطلب» بدل «0 ج.س». */
+var PRICE_ON_REQUEST = 'السعر عند الطلب';
+function hasPrice(n){
+  var v = Number(n);
+  return isFinite(v) && v > 0;
+}
+function priceLabel(n){
+  return hasPrice(n) ? fmtPrice(n)+' ج.س' : PRICE_ON_REQUEST;
+}
+
 /* ====== مرشّح يحجب محتوى Sanity التجريبي ====== */
 var DEMO_MARKERS = ['hig', 'da', 'سxشئ'];
 function normalizeText(s){ return String(s == null ? '' : s).toLowerCase().replace(/[\s\u200e\u200f\u200b]/g, ''); }
@@ -1375,7 +1386,8 @@ var modalExtras = [];
 var lastFocused = null;
 
 /* ====== SVG placeholder for dish images ====== */
-var ICONS_BY_CAT = {fish:'#i-wave',grill:'#i-skewer',main:'#i-box',start:'#i-bowl',drink:'#i-cup'};
+/* المفاتيح تطابق الأقسام المُعرّفة في لوحة التحكم (bizza = سلطات ومقبلات، shorbat = شوربات، anything = مشروبات ساخنة) */
+var ICONS_BY_CAT = {fish:'#i-wave',grill:'#i-skewer',main:'#i-box',start:'#i-bowl',bizza:'#i-bowl',shorbat:'#i-bowl',drink:'#i-cup',anything:'#i-tea'};
 
 window.imgFallback = function(img){
   img.style.display = 'none';
@@ -1432,7 +1444,7 @@ function renderMenu(items){
         '<div class="dish-top"><div class="dish-ico"><svg><use href="'+ic+'"/></svg></div>' +
         '<div><h3>'+esc(d.title)+'</h3><div class="dish-sub">'+esc(d.sub)+'</div></div></div>' +
         '<p class="desc">'+esc(d.desc)+'</p>' +
-        '<div class="dish-foot"><span class="price">'+fmtPrice(d.price)+' <small>ج.س</small></span>'+tg+sp+'</div>' +
+        '<div class="dish-foot"><span class="price'+(hasPrice(d.price)?'':' price-tbd')+'">'+(hasPrice(d.price) ? fmtPrice(d.price)+' <small>ج.س</small>' : PRICE_ON_REQUEST)+'</span>'+tg+sp+'</div>' +
       '</div>';
     g.appendChild(el);
   });
@@ -1461,7 +1473,7 @@ function openDishModal(id){
   document.getElementById('modalTitle').textContent = d.title;
   document.getElementById('modalSub').textContent = d.sub;
   document.getElementById('modalDesc').textContent = d.desc;
-  document.getElementById('modalPrice').textContent = fmtPrice(d.price)+' ج.س';
+  document.getElementById('modalPrice').textContent = priceLabel(d.price);
   document.getElementById('modalQty').textContent = '1';
   var el = document.getElementById('extrasList');
   el.innerHTML = '';
@@ -1469,7 +1481,7 @@ function openDishModal(id){
     d.extras.forEach(function(ex,i){
       var div = document.createElement('div');
       div.className = 'extra-item';
-      div.innerHTML = '<label><input type="checkbox" data-idx="'+i+'" onchange="toggleExtra(this,'+i+')"> '+esc(ex.name)+'</label><span class="extra-price">+ '+fmtPrice(ex.price)+' ج.س</span>';
+      div.innerHTML = '<label><input type="checkbox" data-idx="'+i+'" onchange="toggleExtra(this,'+i+')"> '+esc(ex.name)+'</label><span class="extra-price">'+(hasPrice(ex.price) ? '+ '+fmtPrice(ex.price)+' ج.س' : 'مجاناً')+'</span>';
       el.appendChild(div);
     });
   } else {
@@ -1496,11 +1508,14 @@ window.changeModalQty = function(d){
 window.addFromModal = function(){
   if(!modalDish) return;
   var extras = modalExtras.map(function(i){return modalDish.extras[i]});
-  var extrasTotal = extras.reduce(function(s,e){return s+e.price},0);
+  var extrasTotal = extras.reduce(function(s,e){return s+(Number(e.price)||0)},0);
+  var basePrice = hasPrice(modalDish.price) ? Number(modalDish.price) : 0;
   var item = {
     id: Date.now(), dishId: modalDish.id, title: modalDish.title,
-    basePrice: modalDish.price, extras: extras, extrasTotal: extrasTotal,
-    unitPrice: modalDish.price + extrasTotal, qty: modalQty
+    basePrice: basePrice, extras: extras, extrasTotal: extrasTotal,
+    unitPrice: basePrice + extrasTotal, qty: modalQty,
+    /* صنف بلا سعر في لوحة التحكم: يُحدد سعره عند التأكيد على واتساب */
+    priceTbd: !hasPrice(modalDish.price)
   };
   cart.push(item);
   saveCart();
@@ -1636,13 +1651,26 @@ window.addOfferToCart = function(idx){
   showToast('✅ تمت إضافة العرض إلى السلة');
 };
 
+/* نص سعر سطر السلة: يراعي الأصناف التي لم يُحدد سعرها بعد */
+function lineTotalLabel(item){
+  var amount = (Number(item.unitPrice)||0) * (item.qty||0);
+  if(item.priceTbd){
+    return amount > 0 ? fmtPrice(amount)+' ج.س + '+PRICE_ON_REQUEST : PRICE_ON_REQUEST;
+  }
+  return fmtPrice(amount)+' ج.س';
+}
+function cartHasTbd(){ return cart.some(function(i){return i.priceTbd}); }
+
 function updateCartTotals(){
   var count = cart.reduce(function(s,i){return s+(i.qty||0)},0);
-  var total = cart.reduce(function(s,i){return s+(i.unitPrice*i.qty)},0);
+  var total = cart.reduce(function(s,i){return s+((Number(i.unitPrice)||0)*(i.qty||0))},0);
+  var totalText = fmtPrice(total)+' ج.س' + (cartHasTbd() ? ' +' : '');
   document.getElementById('navBadge').textContent = count;
   document.getElementById('bbBadge').textContent = count;
-  document.getElementById('cartTotal').textContent = fmtPrice(total)+' ج.س';
-  document.getElementById('bbTotal').textContent = fmtPrice(total)+' ج.س';
+  var ct = document.getElementById('cartTotal');
+  ct.textContent = totalText;
+  ct.title = cartHasTbd() ? 'بعض الأصناف سعرها عند الطلب ويُحدد عند التأكيد' : '';
+  document.getElementById('bbTotal').textContent = totalText;
 }
 
 function updateCart(){
@@ -1656,7 +1684,7 @@ function updateCart(){
     div.className = 'cart-item';
     div.setAttribute('data-idx', idx);
     div.innerHTML =
-      '<div class="ci-info"><h4>'+esc(item.title)+'</h4><div class="ci-extras">'+esc(extrasText)+'</div><div class="ci-price">'+fmtPrice(item.unitPrice*item.qty)+' ج.س</div></div>'+
+      '<div class="ci-info"><h4>'+esc(item.title)+'</h4><div class="ci-extras">'+esc(extrasText)+'</div><div class="ci-price">'+lineTotalLabel(item)+'</div></div>'+
       '<div class="ci-controls">'+
         '<button class="ci-btn" type="button" aria-label="تقليل الكمية" onclick="cartQty('+idx+',-1)">\u2212</button>'+
         '<span class="ci-qty">'+item.qty+'</span>'+
@@ -1680,7 +1708,7 @@ window.cartQty = function(idx,d){
       var q = el.querySelector('.ci-qty');
       var p = el.querySelector('.ci-price');
       if(q) q.textContent = item.qty;
-      if(p) p.textContent = fmtPrice(item.unitPrice*item.qty)+' ج.س';
+      if(p) p.textContent = lineTotalLabel(item);
     }
     updateCartTotals();
   }
@@ -1695,7 +1723,7 @@ window.sendOrder = function(){
   var addr = document.getElementById('custAddress').value.trim();
   var pay = document.getElementById('custPay').value;
   if(!name||!phone){alert('يرجى كتابة الاسم ورقم الهاتف');return}
-  var total = cart.reduce(function(s,i){return s+(i.unitPrice*i.qty)},0);
+  var total = cart.reduce(function(s,i){return s+((Number(i.unitPrice)||0)*(i.qty||0))},0);
   var msg = 'طلب جديد من مطعم '+SITE.name+'\n';
   msg += '-----------------------------------\n';
   msg += 'العميل: '+name+'\n';
@@ -1706,10 +1734,11 @@ window.sendOrder = function(){
   msg += 'تفاصيل الطلب:\n';
   cart.forEach(function(item,i){
     var ex = item.extras.length>0 ? ' ('+item.extras.map(function(e){return e.name}).join('، ')+')' : '';
-    msg += (i+1)+'. '+item.title+ex+' × '+item.qty+' = '+fmtPrice(item.unitPrice*item.qty)+' ج.س\n';
+    msg += (i+1)+'. '+item.title+ex+' × '+item.qty+' = '+lineTotalLabel(item)+'\n';
   });
   msg += '-----------------------------------\n';
   msg += 'المجموع الإجمالي: '+fmtPrice(total)+' ج.س';
+  if(cartHasTbd()) msg += ' (+ أصناف سعرها عند الطلب — يُحدد المجموع النهائي عند التأكيد)';
   window.open('https://wa.me/'+SITE.whatsapp+'?text='+encodeURIComponent(msg),'_blank');
 };
 
