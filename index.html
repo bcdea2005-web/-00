@@ -361,18 +361,29 @@
   @keyframes floatBadge{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 
   /* ===== Filters ===== */
-  .filters{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:40px}
+  .filters{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:40px;position:relative;z-index:3}
   .filter-btn{
-    padding:10px 22px;border-radius:99px;cursor:pointer;
-    font-size:.95rem;font-weight:700;font-family:inherit;
-    background:var(--card);color:var(--ink-soft);
-    border:1px solid var(--line);transition:.25s;
+    padding:11px 24px;border-radius:99px;cursor:pointer;
+    font-size:.96rem;font-weight:800;font-family:inherit;
+    /* ثيم الموقع: خلفية فاتحة + حدّ ونص برجندي (لون العناوين)، والزر المختار برتقالي */
+    background:var(--card-soft);
+    color:var(--burgundy);
+    border:2px solid var(--burgundy-soft);
+    box-shadow:var(--shadow-sm);
+    transition:.25s;
   }
-  .filter-btn:hover{color:var(--burgundy);border-color:var(--orange)}
+  .filter-btn:hover{
+    color:#fff;
+    background:var(--burgundy);
+    border-color:var(--burgundy);
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(107,29,29,.30);
+  }
+  .filter-btn:focus-visible{outline:3px solid var(--orange-soft);outline-offset:2px}
   .filter-btn.active{
     background:linear-gradient(135deg,#F4A574,#E67E4D,#C9602C);
     color:#fff;border-color:transparent;
-    box-shadow:0 6px 18px rgba(230,126,77,.30);
+    box-shadow:0 8px 22px rgba(230,126,77,.40);
   }
 
   /* ===== Menu Cards ===== */
