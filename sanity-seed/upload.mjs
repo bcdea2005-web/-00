@@ -18,6 +18,8 @@
  *   --dataset <name>  افتراضي: production
  *   --force           إعادة كتابة الأطباق الموجودة (createOrReplace) — احذر: يمسح تعديلات اللوحة
  *   --patch-images    يحدّث صور الأطباق الموجودة فقط (patch) — لا يمسّ الأسعار أو التعديلات الأخرى
+ *   --hero <مسار>     صورة خلفية الواجهة التي تُرفع وتُربط في siteSettings.heroBackground (افتراضي: assets/logo.jpg)
+ *   --no-hero         تخطي خطوة صورة خلفية الواجهة
  *
  * لا يحتاج أي تثبيت (npm install) — يعتمد على fetch المدمج في Node 18+.
  */
@@ -124,11 +126,23 @@ const teaExtras = [
 ];
 const existingExtraIds = new Set(await query('*[_type=="extra" && _id in $ids]._id', { ids: teaExtras.map((e) => e._id) }));
 
+// ---------- 4) صورة خلفية الواجهة (Landing Page) ----------
+// يرفع صورة الشعار (أو أي صورة تمررها بـ --hero) ويضبطها في حقل
+// heroBackground بمستند siteSettings — يعرضها الموقع كخلفية كبيرة مع لون أحمر خفيف.
+const skipHero = argv.includes('--no-hero');
+const heroFile = arg('hero', join(here, '..', 'assets', 'logo.jpg'));
+const heroAvailable = existsSync(heroFile);
+const settingsDoc = (!skipHero && heroAvailable)
+  ? await query('*[_type=="siteSettings"][0]{_id}')
+  : null;
+
 // ---------- ملخص ----------
 log(`\nالمشروع: ${projectId} / ${dataset}`);
 log(`الصور:   ${imageFiles.length} ملف — ${imageFiles.filter((f) => assetByFile[f]).length} مرفوعة مسبقاً، ${imageFiles.filter((f) => !assetByFile[f]).length} سترفع الآن`);
 log(`الإضافات: ${teaExtras.length} — ${teaExtras.filter((e) => existingExtraIds.has(e._id)).length} موجودة، ${teaExtras.filter((e) => !existingExtraIds.has(e._id)).length} ستُنشأ`);
 log(`الأطباق: ${dishes.length} — ${dishes.filter((d) => existingDishIds.has(d._id)).length} موجودة، ${dishes.filter((d) => !existingDishIds.has(d._id)).length} ستُنشأ${force ? ' (وضع --force: ستُستبدل الموجودة أيضاً)' : ''}${patchImages ? ' (وضع --patch-images: ستُحدّث صور الموجودة فقط)' : ''}\n`);
+
+log(`خلفية الواجهة: ${skipHero ? 'متخطاة (--no-hero)' : !heroAvailable ? `الملف غير موجود (${heroFile})` : settingsDoc ? `سيُضبط heroBackground من ${basename(heroFile)}` : 'لا يوجد مستند siteSettings بعد'}`);
 
 const byCat = {};
 for (const d of dishes) {
@@ -193,3 +207,36 @@ const created = (res.results || []).filter((r) => r.operation === 'create').leng
 const updated = (res.results || []).filter((r) => r.operation === 'update').length;
 log(`✅ تم. أُنشئ ${created} مستند${updated ? `، وحُدّث ${updated}` : ''}. (transactionId: ${res.transactionId})`);
 log('   افتح لوحة التحكم لضبط الأسعار — سيعرض الموقع «السعر عند الطلب» حتى تُدخل السعر.');
+
+// ---------- صورة خلفية الواجهة ----------
+if (!skipHero && heroAvailable) {
+  log('\n🖼 صورة خلفية الواجهة (Landing)…');
+  try {
+    const heroName = basename(heroFile);
+    let heroAssetId = await query('*[_type=="sanity.imageAsset" && originalFilename==$n][0]._id', { n: heroName });
+    if (heroAssetId) {
+      log(`   = ${heroName} (مرفوعة مسبقاً)`);
+    } else {
+      const asset = await uploadImage(heroFile);
+      heroAssetId = asset._id;
+      log(`   + ${heroName} → ${heroAssetId}`);
+    }
+    if (!settingsDoc) {
+      log('   ⚠ لا يوجد مستند siteSettings — أنشئه من لوحة التحكم أولاً ثم أعد التشغيل.');
+    } else {
+      await mutate([{
+        patch: {
+          id: settingsDoc._id,
+          set: { heroBackground: { _type: 'image', asset: { _type: 'reference', _ref: heroAssetId } } },
+        },
+      }]);
+      log('   ✅ ضُبط heroBackground في siteSettings — ستظهر كخلفية كبيرة وفوقها لون أحمر خفيف.');
+    }
+  } catch (e) {
+    log(`   ⚠ تعذّر ضبط صورة الخلفية: ${e.message && e.message.slice(0, 300)}`);
+    log('   إن كان السبب رفض المخطط لحقل غير معروف، أضف حقل heroBackground إلى مخطط siteSettings في Studio');
+    log('   (الsnippet جاهز في sanity-seed/README.md — قسم «صورة خلفية الواجهة»).');
+  }
+} else if (!skipHero) {
+  log(`\n⚠ تخطّيت صورة الخلفية — الملف غير موجود: ${heroFile}`);
+}

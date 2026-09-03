@@ -5,22 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مشوي للأسماك واللحوم | شواء على الفحم — أم درمان</title>
 <meta name="description" content="مشوي للأسماك واللحوم — أجود الأسماك الطازجة واللحوم المنتقاة، تُشوى على الفحم أمامك في أم درمان.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23E67E4D'/%3E%3Cstop offset='1' stop-color='%237A1F1F'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M32 14c-2 0-3 1.5-5 1.5-3 0-4.5 2-4.5 4.5 0 5 2.5 7.5 3.5 12 .5 2.5 4 2.5 4.5-.1.4-1.7.9-3.5 2-3.5s1.6 1.8 2 3.5c.5 2.6 4 2.6 4.5.1 1-4.5 3.5-7 3.5-12 0-2.5-1.5-4.5-4.5-4.5-2 0-3-1.5-5-1.5z' fill='%23FFFDF6'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23E67E4D'/%3E%3Cstop offset='1' stop-color='%23C1121F'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M32 14c-2 0-3 1.5-5 1.5-3 0-4.5 2-4.5 4.5 0 5 2.5 7.5 3.5 12 .5 2.5 4 2.5 4.5-.1.4-1.7.9-3.5 2-3.5s1.6 1.8 2 3.5c.5 2.6 4 2.6 4.5.1 1-4.5 3.5-7 3.5-12 0-2.5-1.5-4.5-4.5-4.5-2 0-3-1.5-5-1.5z' fill='%23FFFDF6'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* ===== Warm cream / burgundy / burnt orange palette (alRomansiah-inspired) ===== */
+    /* ===== Warm cream / RED / burnt orange palette — هوية المطعم الحمراء ===== */
     --cream:#FAF6F1;
     --cream-2:#FDF8F3;
     --paper:#FFFCFA;
     --card:#FDF8F3;
     --card-soft:#FBF4EE;
 
-    --burgundy:#6B1D1D;        /* headings */
-    --burgundy-deep:#4D1212;   /* footer bg */
-    --burgundy-soft:#8B2D2D;   /* secondary headings */
+    --burgundy:#C1121F;        /* headings */
+    --burgundy-deep:#8A0B16;   /* footer bg */
+    --burgundy-soft:#D93A45;   /* secondary headings */
     --ink:#2C2C2C;             /* body text */
     --ink-soft:#5C544A;        /* muted text */
 
@@ -35,27 +35,27 @@
     --gold:#B8893A;            /* warm gold accent */
     --gold-soft:#E0C288;
 
-    --shadow:0 14px 38px rgba(107,29,29,.10);
-    --shadow-sm:0 8px 22px rgba(107,29,29,.08);
-    --shadow-card:0 10px 30px rgba(107,29,29,.08);
+    --shadow:0 14px 38px rgba(193,18,31,.10);
+    --shadow-sm:0 8px 22px rgba(193,18,31,.08);
+    --shadow-card:0 10px 30px rgba(193,18,31,.08);
     --shadow-cta:0 8px 22px rgba(230,126,77,.35);
 
     /* ===== بطاقة الصنف بلون الموقع (برجندي) ===== */
-    --dish-bg:linear-gradient(160deg,#7A2323 0%,#6B1D1D 45%,#4D1212 100%);
+    --dish-bg:linear-gradient(160deg,#D02531 0%,#C1121F 45%,#8A0B16 100%);
     --dish-line:rgba(244,165,116,.30);
     --dish-text:#FDF8F3;                 /* عنوان الصنف */
     --dish-text-soft:rgba(250,246,241,.82); /* الوصف */
     --dish-accent:#F4A574;               /* برتقالي فاتح للتفاصيل */
     --dish-plate:linear-gradient(160deg,#FFFDFB,#F6EBDD); /* خلفية صورة الصنف */
-    --shadow-dish:0 14px 36px rgba(60,14,14,.30);
-    --shadow-dish-hover:0 22px 48px rgba(45,10,10,.42);
+    --shadow-dish:0 14px 36px rgba(100,8,16,.30);
+    --shadow-dish-hover:0 22px 48px rgba(70,6,12,.42);
 
     /* ===== مربع العروض الخاصة بنفس لون الموقع ===== */
     --offer-bg:
       radial-gradient(600px 300px at 85% 0%, rgba(230,126,77,.26), transparent 60%),
       radial-gradient(400px 200px at 10% 100%, rgba(184,137,58,.20), transparent 60%),
       var(--dish-bg);
-    --shadow-offer:0 20px 46px rgba(60,14,14,.32);
+    --shadow-offer:0 20px 46px rgba(100,8,16,.32);
 
     --r:20px;
     --r-sm:12px;
@@ -109,7 +109,7 @@
   .logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
   .logo .brand-mark{
     width:50px;height:50px;border-radius:14px;
-    background:linear-gradient(135deg,#F4A574 0%,#E67E4D 55%,#6B1D1D 100%);
+    background:linear-gradient(135deg,#F4A574 0%,#E67E4D 55%,#C1121F 100%);
     display:grid;place-items:center;flex:none;
     box-shadow:0 6px 16px rgba(230,126,77,.30);
     position:relative;overflow:hidden;
@@ -121,6 +121,7 @@
   }
   @keyframes shine{0%{transform:translateX(-100%) translateY(-100%) rotate(45deg)}100%{transform:translateX(100%) translateY(100%) rotate(45deg)}}
   .logo .brand-mark svg{width:26px;height:26px;fill:#FFFCFA;position:relative;z-index:1}
+  .logo .brand-mark img{width:100%;height:100%;object-fit:cover;border-radius:inherit;position:relative;z-index:1;background:#FFFCFA}
   .logo-text{display:flex;flex-direction:column;line-height:1.2}
   .logo-text .l1{font-size:1.1rem;font-weight:900;color:var(--burgundy);letter-spacing:.3px}
   .logo-text .l2{font-size:.8rem;font-weight:700;color:var(--orange-deep);letter-spacing:.5px}
@@ -161,7 +162,7 @@
   /* ===== Ticker (warm themed) ===== */
   .ticker{
     position:relative;z-index:40;
-    background:linear-gradient(90deg,#4D1212,#6B1D1D,#4D1212);
+    background:linear-gradient(90deg,#8A0B16,#C1121F,#8A0B16);
     color:#FDF8F3;font-size:.85rem;overflow:hidden;white-space:nowrap;
     border-bottom:1px solid rgba(230,126,77,.25);
   }
@@ -192,14 +193,31 @@
     min-height:88vh;display:flex;align-items:center;justify-content:center;
     text-align:center;padding:80px 24px 110px;overflow:hidden;
     background:
-      linear-gradient(135deg, rgba(75,18,18,.72) 0%, rgba(45,10,10,.55) 50%, rgba(75,18,18,.72) 100%),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Cdefs%3E%3CradialGradient id='rg' cx='50%25' cy='40%25' r='80%25'%3E%3Cstop offset='0' stop-color='%23E67E4D' stop-opacity='.5'/%3E%3Cstop offset='1' stop-color='%234D1212' stop-opacity='.95'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='1200' height='800' fill='%23200808'/%3E%3Crect width='1200' height='800' fill='url(%23rg)'/%3E%3Cg fill='%23FFB87A' fill-opacity='.5'%3E%3Ccircle cx='300' cy='650' r='4'/%3E%3Ccircle cx='450' cy='700' r='3'/%3E%3Ccircle cx='600' cy='680' r='5'/%3E%3Ccircle cx='750' cy='720' r='3'/%3E%3Ccircle cx='900' cy='660' r='4'/%3E%3Ccircle cx='250' cy='600' r='2.5'/%3E%3Ccircle cx='850' cy='580' r='2.5'/%3E%3Ccircle cx='1000' cy='640' r='3'/%3E%3C/g%3E%3Cg stroke='%23E67E4D' stroke-opacity='.3' stroke-width='1.5' fill='none'%3E%3Cpath d='M0 750 Q300 720 600 740 T1200 730'/%3E%3Cpath d='M0 770 Q300 760 600 765 T1200 760'/%3E%3C/g%3E%3C/svg%3E");
+      radial-gradient(1100px 640px at 50% 38%, #C1121F 0%, #8A0B16 58%, #47060C 100%);
     background-size:cover;background-position:center;
+  }
+  /* شعار المطعم كخلفية افتراضية كبيرة — تُستبدَل تلقائياً بصورة لوحة التحكم عند ضبطها */
+  .hero::before{
+    content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:var(--hero-img, url("assets/logo.jpg"));
+    background-repeat:no-repeat;
+    background-position:center 44%;
+    background-size:min(116vmin,1000px) auto;
+    mix-blend-mode:multiply;opacity:.55;
+  }
+  /* صورة خلفية كبيرة من لوحة تحكم Sanity + لون أحمر خفيف فوقها */
+  .hero.has-cms-bg::before{
+    mix-blend-mode:normal;opacity:1;
+    background-position:center;
+    background-size:cover;
   }
   .hero::after{
     content:"";position:absolute;inset:0;
-    background:linear-gradient(to top, rgba(45,10,10,.5) 0%, transparent 35%, transparent 70%, rgba(45,10,10,.3) 100%);
+    background:linear-gradient(to top, rgba(70,6,12,.5) 0%, transparent 35%, transparent 70%, rgba(70,6,12,.3) 100%);
     pointer-events:none;z-index:1;
+  }
+  .hero.has-cms-bg::after{
+    background:linear-gradient(180deg, rgba(193,18,31,.42) 0%, rgba(193,18,31,.26) 45%, rgba(71,6,12,.62) 100%);
   }
   .hero-content{position:relative;z-index:3;max-width:880px}
   .overline{
@@ -255,9 +273,9 @@
   }
   .feature::after{                               /* connecting "tab fold" hint */
     content:"";position:absolute;left:0;right:0;bottom:-12px;height:14px;
-    background:linear-gradient(180deg,rgba(107,29,29,.04),transparent);
+    background:linear-gradient(180deg,rgba(193,18,31,.04),transparent);
   }
-  .feature:hover{transform:translateY(-4px);border-color:var(--orange-soft);box-shadow:0 18px 38px rgba(107,29,29,.14)}
+  .feature:hover{transform:translateY(-4px);border-color:var(--orange-soft);box-shadow:0 18px 38px rgba(193,18,31,.14)}
   .feature .f-ico{
     flex:none;width:52px;height:52px;border-radius:14px;
     background:linear-gradient(135deg,rgba(230,126,77,.15),rgba(184,137,58,.10));
@@ -330,8 +348,8 @@
   .about-visual .img-wrap{
     position:relative;border-radius:var(--r-lg);overflow:hidden;
     border:6px solid var(--paper);
-    box-shadow:0 24px 60px rgba(107,29,29,.18);z-index:2;
-    aspect-ratio:4/3;background:linear-gradient(135deg,#E67E4D,#6B1D1D);
+    box-shadow:0 24px 60px rgba(193,18,31,.18);z-index:2;
+    aspect-ratio:4/3;background:linear-gradient(135deg,#E67E4D,#C1121F);
   }
   .about-visual .img-wrap::before{
     content:"";position:absolute;inset:0;z-index:1;
@@ -431,7 +449,7 @@
   .price small{font-size:.72rem;font-weight:600;color:rgba(250,246,241,.72);margin-right:4px}
   .price.price-tbd{font-size:.88rem;font-weight:800;color:var(--dish-accent);background:rgba(244,165,116,.14);border:1px dashed rgba(244,165,116,.50);border-radius:99px;padding:4px 12px}
   .tag{font-size:.72rem;font-weight:800;padding:5px 12px;border-radius:99px;white-space:nowrap}
-  .tag.hot{background:linear-gradient(135deg,#F4A574,#E67E4D);color:#4D1212}
+  .tag.hot{background:linear-gradient(135deg,#F4A574,#E67E4D);color:#8A0B16}
   .tag.fresh{background:linear-gradient(135deg,#7DD3E8,#4FB3D9);color:#0B3A4A}
   .tag.new{background:rgba(140,220,150,.18);color:#A8E6B0;border:1px solid rgba(140,220,150,.45)}
   .spicy{width:18px;height:18px;fill:#FF8A5C;filter:drop-shadow(0 0 5px rgba(255,138,92,.55))}
@@ -505,7 +523,7 @@
 
   /* ===== Modal ===== */
   .modal-overlay{
-    position:fixed;inset:0;background:rgba(45,10,10,.72);
+    position:fixed;inset:0;background:rgba(70,6,12,.72);
     backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
     z-index:200;display:none;justify-content:center;align-items:center;padding:20px;
   }
@@ -514,12 +532,12 @@
     background:var(--card);border:1px solid var(--line);
     border-radius:var(--r-lg);width:100%;max-width:500px;max-height:90vh;overflow-y:auto;
     position:relative;animation:modalIn .3s ease;
-    box-shadow:0 30px 80px rgba(45,10,10,.4);
+    box-shadow:0 30px 80px rgba(70,6,12,.4);
   }
   @keyframes modalIn{from{opacity:0;transform:scale(.92) translateY(20px)}to{opacity:1;transform:none}}
   .modal-close{
     position:absolute;top:14px;right:14px;
-    background:rgba(45,10,10,.5);border:none;color:#fff;
+    background:rgba(70,6,12,.5);border:none;color:#fff;
     width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;
     z-index:5;backdrop-filter:blur(4px);transition:.2s;
   }
@@ -565,7 +583,7 @@
   .add-cart-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(230,126,77,.5)}
 
   /* ===== Cart Drawer ===== */
-  .cart-overlay{position:fixed;inset:0;background:rgba(45,10,10,.6);backdrop-filter:blur(4px);z-index:300;display:none;justify-content:flex-start}
+  .cart-overlay{position:fixed;inset:0;background:rgba(70,6,12,.6);backdrop-filter:blur(4px);z-index:300;display:none;justify-content:flex-start}
   .cart-overlay.active{display:flex}
   .cart-drawer{
     background:var(--cream-2);width:100%;max-width:420px;height:100%;
@@ -627,7 +645,7 @@
   /* ===== Bottom Bar ===== */
   .bottom-bar{
     position:fixed;bottom:0;left:0;right:0;
-    background:rgba(77,18,18,.96);backdrop-filter:blur(10px);
+    background:rgba(122,10,20,.96);backdrop-filter:blur(10px);
     border-top:1px solid rgba(230,126,77,.25);
     padding:10px 20px;display:flex;justify-content:space-between;align-items:center;
     z-index:90;gap:14px;
@@ -654,7 +672,7 @@
   footer{
     position:relative;z-index:3;margin-top:80px;margin-bottom:60px;
     border-top:1px solid rgba(230,126,77,.25);
-    background:linear-gradient(160deg,#4D1212 0%,#2C0808 100%);
+    background:linear-gradient(160deg,#8A0B16 0%,#47060C 100%);
     color:#F0E0D0;overflow:hidden;
     border-radius:0;
   }
@@ -712,7 +730,7 @@
     padding:.9rem 1.6rem;border-radius:14px;
     font-weight:700;font-size:.95rem;
     opacity:0;pointer-events:none;transition:.4s;
-    box-shadow:0 14px 30px rgba(45,10,10,.35);
+    box-shadow:0 14px 30px rgba(70,6,12,.35);
   }
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -732,7 +750,7 @@
       background:rgba(250,246,241,.98);
       border-bottom:1px solid var(--line);
       padding:10px 18px 16px;display:none;
-      box-shadow:0 24px 40px rgba(107,29,29,.15);
+      box-shadow:0 24px 40px rgba(193,18,31,.15);
     }
     .nav-links.open{display:flex}
     .nav-links a{display:block;padding:12px 16px}
@@ -811,7 +829,7 @@
 <header id="navbar">
   <nav>
     <a class="logo" href="#home">
-      <span class="brand-mark"><svg><use href="#i-flame"/></svg></span>
+      <span class="brand-mark"><img src="assets/logo.jpg" alt="شعار مشوي للأسماك واللحوم"></span>
       <span class="logo-text"><span class="l1">مشوي</span><span class="l2">للأسماك واللحوم</span></span>
     </a>
     <ul class="nav-links" id="navLinks">
@@ -883,7 +901,7 @@
               <linearGradient id="bgg" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0" stop-color="#F4A574"/>
                 <stop offset=".5" stop-color="#E67E4D"/>
-                <stop offset="1" stop-color="#6B1D1D"/>
+                <stop offset="1" stop-color="#C1121F"/>
               </linearGradient>
               <radialGradient id="rg2" cx="50%" cy="50%" r="60%">
                 <stop offset="0" stop-color="#FFD9B0" stop-opacity=".6"/>
@@ -894,9 +912,9 @@
             <rect width="400" height="300" fill="url(#rg2)"/>
             <!-- Stylized grill + flame illustration -->
             <g transform="translate(200 150)">
-              <ellipse cx="0" cy="40" rx="120" ry="14" fill="#4D1212" opacity=".55"/>
-              <rect x="-100" y="22" width="200" height="14" rx="4" fill="#3D0F0F"/>
-              <line x1="-90" y1="22" x2="90" y2="22" stroke="#6B1D1D" stroke-width="2"/>
+              <ellipse cx="0" cy="40" rx="120" ry="14" fill="#8A0B16" opacity=".55"/>
+              <rect x="-100" y="22" width="200" height="14" rx="4" fill="#55070E"/>
+              <line x1="-90" y1="22" x2="90" y2="22" stroke="#C1121F" stroke-width="2"/>
               <g fill="#FFB87A">
                 <rect x="-80" y="14" width="3" height="14" rx="1"/>
                 <rect x="-60" y="14" width="3" height="14" rx="1"/>
@@ -1059,7 +1077,7 @@
   <div class="footer-grid">
     <div class="footer-brand">
       <a class="logo" href="#home">
-        <span class="brand-mark"><svg><use href="#i-flame"/></svg></span>
+        <span class="brand-mark"><img src="assets/logo.jpg" alt="شعار مشوي للأسماك واللحوم"></span>
         <span class="logo-text"><span class="l1">مشوي</span><span class="l2">للأسماك واللحوم</span></span>
       </a>
       <p>مطعم <b>مشوي للأسماك واللحوم</b> — حيث تجتمع نعمتا النيل والفحم بشغف وأمانة. الأسماك الطازجة، اللحوم المنتقاة، والطعم الأصيل هو ما يميزنا.</p>
@@ -1260,6 +1278,17 @@ function settingText(s,keys){
 function hasSetting(s,keys){
   return keys.some(function(key){return Object.prototype.hasOwnProperty.call(s,key)});
 }
+function settingImage(s,keys){
+  if(!s)return '';
+  for(var i=0;i<keys.length;i++){
+    var v=s[keys[i]];
+    if(!v)continue;
+    if(typeof v==='string')return v;
+    var url=buildCroppedImageUrl(v);
+    if(url)return url;
+  }
+  return '';
+}
 function transformSettings(s){
   if(!s)return null;
   var titleKeys=['heroTitle','title','siteTitle'];
@@ -1281,7 +1310,8 @@ function transformSettings(s){
     aboutStory:storyToString(s.aboutStory),
     tickerMessages:cleanStrings(s.tickerMessages),
     workingHours:(s.workingHours||[]).filter(function(h){return h && !isDemoText(h.label) && !isDemoText(h.hours)}),
-    paymentMethods:cleanStrings(s.paymentMethods)
+    paymentMethods:cleanStrings(s.paymentMethods),
+    heroBackground:settingImage(s,['heroBackground','heroImage','backgroundImage','heroBg'])
   };
 }
 
@@ -1332,6 +1362,15 @@ function applySanityData(data){
     if(data.settings.heroSubtitleConfigured && data.settings.heroSubtitle){
       var p=document.querySelector('.hero p');
       if(p)p.textContent=data.settings.heroSubtitle;
+    }
+    /* صورة الخلفية الكبيرة القادمة من لوحة تحكم Sanity */
+    if(data.settings.heroBackground){
+      var heroEl=document.querySelector('.hero');
+      if(heroEl){
+        var bgUrl=String(data.settings.heroBackground).replace(/[\\"]/g,function(m){return '\\'+m});
+        heroEl.style.setProperty('--hero-img','url("'+bgUrl+'")');
+        heroEl.classList.add('has-cms-bg');
+      }
     }
   }
   if(data.settings&&data.settings.aboutStory){
