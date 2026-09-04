@@ -1372,6 +1372,13 @@ function applySanityData(data){
         heroEl.style.setProperty('--hero-img','url("'+bgUrl+'")');
         heroEl.classList.add('has-cms-bg');
       }
+    } else {
+      /* أُزيلت الصورة من لوحة التحكم → نعيد CSS البطل الافتراضي (شعار المطعم) */
+      var heroEl=document.querySelector('.hero');
+      if(heroEl){
+        heroEl.style.removeProperty('--hero-img');
+        heroEl.classList.remove('has-cms-bg');
+      }
     }
   }
   if(data.settings&&data.settings.aboutStory){
