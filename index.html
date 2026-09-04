@@ -804,6 +804,7 @@
     <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3 9-8 11-5-2-8-6-8-11V5l8-3zm-1 6v6l5-3-5-3z"/></symbol>
     <symbol id="i-hand" viewBox="0 0 24 24"><path d="M9 3v9l-2-2c-1-1-3 1-2 2l4 5c1 1 3 2 5 2h3c2 0 4-2 4-4v-6c0-1-1-2-2-2s-2 1-2 2v3-8c0-1-1-2-2-2s-2 1-2 2v6-8c0-1-1-2-2-2S9 2 9 3z"/></symbol>
     <symbol id="i-crown" viewBox="0 0 24 24"><path d="M2 8l4 3 3-6 3 6 3-6 3 6 4-3-2 11H4L2 8zm4 12h12v2H6v-2z"/></symbol>
+    <symbol id="i-pizza" viewBox="0 0 24 24"><path d="M3 7.5C8.2 4 15.8 4 21 7.5L12 22 3 7.5zm9 2.2a1.4 1.4 0 1 0 .1 2.8 1.4 1.4 0 0 0-.1-2.8zm-3.2 4.2a1.15 1.15 0 1 0 .1 2.3 1.15 1.15 0 0 0-.1-2.3zm4.8 2.4a1.15 1.15 0 1 0 .1 2.3 1.15 1.15 0 0 0-.1-2.3z"/></symbol>
   </defs>
 </svg>
 
@@ -956,6 +957,7 @@
     <button class="filter-btn" data-filter="main">أطباق رئيسية</button>
     <button class="filter-btn" data-filter="start">مقبلات وسلطات</button>
     <button class="filter-btn" data-filter="drink">مشروبات</button>
+    <button class="filter-btn" data-filter="pizza">البيتزا</button>
   </div>
   <div class="menu-grid" id="menuGrid"></div>
 </section>
@@ -1244,7 +1246,7 @@ function transformDishes(dishes, categories) {
     var relation = d.category || {};
     var catKey = relation.key || catMap[relation._id] || catMap[relation._ref] || catMap[relation] || 'fish';
     var extras=(d.extras||[]).filter(function(ex){return ex && ex.name && !isDemoText(ex.name)}).map(function(ex){return{name:ex.name,price:ex.price}});
-    return{id:i+1,title:d.title,sub:d.sub||'',cat:catKey,price:d.price,desc:d.description||'',img:buildCroppedImageUrl(d.image)||d.imageUrl||'',tag:d.tag||'',spicy:d.spicy||false,extras:extras};
+    return{id:i+1,title:d.title,sub:d.sub||'',cat:catKey,price:d.price,desc:d.description||'',img:buildCroppedImageUrl(d.image)||d.imageUrl||'',tag:d.tag||'',spicy:d.spicy||false,extras:extras,order:d.order||0};
   });
 }
 
@@ -1335,10 +1337,101 @@ async function loadSanityData(){
   }catch(e){console.warn('⚠️ Could not load Sanity data:',e);return null}
 }
 
+/* ====== أسعار وأصناف من التسجيلات ======
+   تُدمَج مع بيانات Sanity دون حذف أي صنف موجود:
+   - إن كان للصنف سعر في اللوحة (>0) يبقى سعر اللوحة.
+   - إن كان السعر 0 أو غير محدد، يُملأ من التسجيلات.
+   - الأصناف الجديدة (بروست، شاورما، برجر، بيتزا، فرايز، مايسترو، كريسبي) تُضاف إن لم توجد. */
+var LOCAL_IMG = 'sanity-seed/images/';
+var LOCAL_MENU = [
+  {title:'فراولة بالحليب', price:8000},
+  {title:'فراولة سادة', price:8000},
+  {title:'مانجو بالحليب', price:8000},
+  {title:'مانجو سادة', price:8000},
+  {title:'أناناس بالحليب', price:8000},
+  {title:'موز بالحليب', price:8000},
+  {title:'موز بالتمر', price:8000},
+  {title:'شمام', price:8000},
+  {title:'برتقال', price:8000},
+  {title:'ليمون نعناع', price:8000},
+  {title:'مايسترو', price:10000, sub:'عصير', cat:'drink', order:18.5, img:LOCAL_IMG+'maestro.jpg', desc:'عصير مايسترو — خليط فواكه مميز بالحليب.'},
+  {title:'بروست 8 قطع', price:75000, sub:'8 قطع', cat:'grill', order:35, tag:'hot', img:LOCAL_IMG+'broast.jpg', desc:'ثماني قطع دجاج بروست مقرمشة، متبّلة ومقلية حتى التحميص الذهبي. تكفي 3 إلى 4 أشخاص.'},
+  {title:'بروست 4 قطع', price:37500, sub:'4 قطع', cat:'grill', order:36, img:LOCAL_IMG+'broast.jpg', desc:'أربع قطع دجاج بروست مقرمشة — نصف وجبة الـ 8 قطع. مناسبة لشخص أو شخصين.'},
+  {title:'شاورما عادي', price:12000, sub:'شاورما', cat:'grill', order:37, img:LOCAL_IMG+'shawarma.jpg', desc:'شاورما دجاج في خبز صاج مع الثومية والخضار والمخلل.'},
+  {title:'شاورما صاروخ', price:19000, sub:'حجم كبير', cat:'grill', order:38, tag:'hot', img:LOCAL_IMG+'shawarma.jpg', desc:'شاورما صاروخ بحجم كبير، دجاج وفير مع الثومية والخضار والمخلل.'},
+  {title:'شاورما عربي', price:36000, sub:'خبز عربي', cat:'grill', order:39, img:LOCAL_IMG+'shawarma.jpg', desc:'شاورما في خبز عربي بكمية أكبر تناسب المشاركة.'},
+  {title:'برجر', price:21000, sub:'برجر', cat:'grill', order:40, img:LOCAL_IMG+'burger.jpg', desc:'برجر لحم مشوي في خبز طري مع الخضار والصوص.'},
+  {title:'كريسبي', price:19000, sub:'وجبة', cat:'grill', order:41, img:LOCAL_IMG+'crispy.jpg', desc:'وجبة كريسبي — قطع صدر دجاج مقرمشة مع البطاطس.'},
+  {title:'فرايز عادي', price:10000, sub:'بطاطس', cat:'start', order:42, img:LOCAL_IMG+'fries.jpg', desc:'بطاطس مقلية ذهبية مقرمشة.'},
+  {title:'فرايز جبن', price:13000, sub:'بطاطس بالجبن', cat:'start', order:43, tag:'new', img:LOCAL_IMG+'fries-cheese.jpg', desc:'بطاطس مقلية مغطاة بالجبن الذائب.'},
+  {title:'بيتزا كبيرة', price:46000, sub:'الأنواع العامة', cat:'pizza', order:44, img:LOCAL_IMG+'pizza.jpg', desc:'بيتزا كبيرة — الأنواع العامة (دجاج، لحم، مشكلة وغيرها).'},
+  {title:'بيتزا وسط', price:36000, sub:'الأنواع العامة', cat:'pizza', order:45, img:LOCAL_IMG+'pizza.jpg', desc:'بيتزا وسط — الأنواع العامة (دجاج، لحم، مشكلة وغيرها).'},
+  {title:'بيتزا صغيرة', price:28000, sub:'الأنواع العامة', cat:'pizza', order:46, img:LOCAL_IMG+'pizza.jpg', desc:'بيتزا صغيرة — الأنواع العامة (دجاج، لحم، مشكلة وغيرها).'},
+  {title:'بيتزا خضار كبيرة', price:40000, sub:'خضار', cat:'pizza', order:47, img:LOCAL_IMG+'pizza-veg.jpg', desc:'بيتزا خضار كبيرة بالفلفل والطماطم والبصل والزيتون.'},
+  {title:'بيتزا خضار وسط', price:30000, sub:'خضار', cat:'pizza', order:48, img:LOCAL_IMG+'pizza-veg.jpg', desc:'بيتزا خضار وسط بالفلفل والطماطم والبصل والزيتون.'},
+  {title:'بيتزا خضار صغيرة', price:22000, sub:'خضار', cat:'pizza', order:49, img:LOCAL_IMG+'pizza-veg.jpg', desc:'بيتزا خضار صغيرة بالفلفل والطماطم والبصل والزيتون.'},
+  {title:'بيتزا مارجريتا كبيرة', price:40000, sub:'مارجريتا', cat:'pizza', order:50, img:LOCAL_IMG+'pizza-margherita.jpg', desc:'بيتزا مارجريتا كبيرة بصلصة الطماطم والجبن والريحان.'},
+  {title:'بيتزا مارجريتا وسط', price:30000, sub:'مارجريتا', cat:'pizza', order:51, img:LOCAL_IMG+'pizza-margherita.jpg', desc:'بيتزا مارجريتا وسط بصلصة الطماطم والجبن والريحان.'},
+  {title:'بيتزا مارجريتا صغيرة', price:22000, sub:'مارجريتا', cat:'pizza', order:52, img:LOCAL_IMG+'pizza-margherita.jpg', desc:'بيتزا مارجريتا صغيرة بصلصة الطماطم والجبن والريحان.'}
+];
+
+function normTitle(s){
+  return String(s||'').replace(/[اأإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/[^\u0621-\u064Aa-zA-Z0-9]/g,'').toLowerCase();
+}
+function resolveCatKey(cats, re, fallback){
+  var found=(cats||[]).find(function(c){ return re.test((c.title||'')+' '+(c.key||'')); });
+  return found ? found.key : fallback;
+}
+function mergeLocalMenu(dishes, cats){
+  dishes=(dishes||[]).map(function(d){ return d; });
+  var idx={};
+  dishes.forEach(function(d,i){ idx[normTitle(d.title)]=i; });
+  var grill=resolveCatKey(cats, /مشوي|لحوم|grill|meat/i, 'grill');
+  var sides=resolveCatKey(cats, /سلطة|مقبل|salad|bizza|start/i, 'bizza');
+  var drinks=resolveCatKey(cats, /عصير|عصائر|juice/i, 'drink');
+  var pizzaKey=resolveCatKey(cats, /بيتزا|pizza/i, 'pizza');
+  var aliases={grill:grill, start:sides, bizza:sides, drink:drinks, pizza:pizzaKey};
+  LOCAL_MENU.forEach(function(loc){
+    var k=normTitle(loc.title);
+    if(idx[k]!=null){
+      var d=dishes[idx[k]];
+      if(hasPrice(loc.price) && !hasPrice(d.price)) d.price=loc.price;
+      if(loc.img && !d.img) d.img=loc.img;
+      if(loc.sub && !d.sub) d.sub=loc.sub;
+    } else if(loc.desc || loc.cat){
+      dishes.push({
+        id:dishes.length+1,
+        title:loc.title,
+        sub:loc.sub||'',
+        cat:aliases[loc.cat]||loc.cat||'grill',
+        price:loc.price,
+        desc:loc.desc||'',
+        img:loc.img||'',
+        tag:loc.tag||'',
+        spicy:!!loc.spicy,
+        extras:loc.extras||[],
+        order:loc.order||100
+      });
+      idx[k]=dishes.length-1;
+    }
+  });
+  dishes.sort(function(a,b){ return (a.order||0)-(b.order||0); });
+  dishes.forEach(function(d,i){ d.id=i+1; });
+  var categories=(cats||[]).slice();
+  var hasPizza=dishes.some(function(d){ return d.cat===pizzaKey; });
+  var hasPizzaCat=categories.some(function(c){ return c.key===pizzaKey; });
+  if(hasPizza && !hasPizzaCat){
+    categories.push({key:pizzaKey, title:'البيتزا', icon:''});
+  }
+  return {dishes:dishes, categories:categories};
+}
+
 function applySanityData(data){
   if(!data)return;
-  if(data.dishes){window.menu=data.dishes;renderMenu(window.menu)}
-  if(data.categories&&data.categories.length>0)updateCategoryFilters(data.categories);
+  var merged=mergeLocalMenu(data.dishes||[], data.categories||[]);
+  window.menu=merged.dishes;
+  renderMenu(window.menu);
+  if(merged.categories&&merged.categories.length>0)updateCategoryFilters(merged.categories);
   if(data.settings&&data.settings.tickerMessages&&data.settings.tickerMessages.length>0)updateTicker(data.settings.tickerMessages);
   if(data.offers&&data.offers.length>0)updateOffers(data.offers);
   if(data.settings&&data.settings.paymentMethods&&data.settings.paymentMethods.length>0)updatePaymentMethods(data.settings.paymentMethods);
@@ -1479,7 +1572,7 @@ var lastFocused = null;
 
 /* ====== SVG placeholder for dish images ====== */
 /* المفاتيح تطابق الأقسام المُعرّفة في لوحة التحكم (bizza = سلطات ومقبلات، shorbat = شوربات، anything = مشروبات ساخنة) */
-var ICONS_BY_CAT = {fish:'#i-wave',grill:'#i-skewer',main:'#i-box',start:'#i-bowl',bizza:'#i-bowl',shorbat:'#i-bowl',drink:'#i-cup',anything:'#i-tea'};
+var ICONS_BY_CAT = {fish:'#i-wave',grill:'#i-skewer',meat:'#i-skewer',main:'#i-box',start:'#i-bowl',bizza:'#i-bowl',salads:'#i-bowl',shorbat:'#i-bowl',soups:'#i-bowl',drink:'#i-cup',juices:'#i-cup',anything:'#i-tea',hot:'#i-tea',pizza:'#i-pizza'};
 
 window.imgFallback = function(img){
   img.style.display = 'none';
@@ -1913,7 +2006,12 @@ function syncSiteInfo(){
 async function initSanity() {
   var data = await loadSanityData();
   if (data) { applySanityData(data); }
-  else { renderMenu(menu); }
+  else {
+    var merged = mergeLocalMenu(menu||[], []);
+    window.menu = merged.dishes;
+    renderMenu(window.menu);
+    if(merged.categories.length) updateCategoryFilters(merged.categories);
+  }
 }
 
 // Init

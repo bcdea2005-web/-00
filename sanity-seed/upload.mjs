@@ -18,6 +18,7 @@
  *   --dataset <name>  افتراضي: production
  *   --force           إعادة كتابة الأطباق الموجودة (createOrReplace) — احذر: يمسح تعديلات اللوحة
  *   --patch-images    يحدّث صور الأطباق الموجودة فقط (patch) — لا يمسّ الأسعار أو التعديلات الأخرى
+ *   --patch-prices    يحدّث أسعار الأطباق الموجودة فقط (patch) — لا يمسّ الوصف أو الصورة أو أي تعديل آخر
  *   --hero <مسار>     صورة خلفية الواجهة التي تُرفع وتُربط في siteSettings.heroBackground (افتراضي: assets/logo.jpg)
  *   --no-hero         تخطي خطوة صورة خلفية الواجهة
  *
@@ -41,6 +42,7 @@ const token = arg('token', process.env.SANITY_TOKEN) || '';
 const confirmed = argv.includes('--yes');
 const force = argv.includes('--force');
 const patchImages = argv.includes('--patch-images');
+const patchPrices = argv.includes('--patch-prices');
 const apiVersion = '2024-01-01';
 const base = process.env.SANITY_API_BASE || `https://${projectId}.api.sanity.io/v${apiVersion}`;
 
@@ -109,11 +111,20 @@ const dishes = readFileSync(ndjsonPath, 'utf8')
     try { return JSON.parse(l); } catch (e) { die(`سطر ${i + 1} في dishes.ndjson ليس JSON صالحاً: ${e.message}`); }
   });
 
-// تحقق من أن الأقسام المُشار إليها موجودة فعلاً في اللوحة
+// أقسام إضافية تُنشأ إن لم تكن موجودة (البيتزا لم تكن قسماً في اللوحة)
+const extraCategories = [
+  { _id: 'category-pizza', _type: 'category', title: 'البيتزا', key: 'pizza', order: 6 },
+];
+const extraCatIds = new Set(extraCategories.map((c) => c._id));
+
+// تحقق من أن الأقسام المُشار إليها موجودة فعلاً في اللوحة (أو ستُنشأ الآن)
 const catRefs = [...new Set(dishes.map((d) => d.category?._ref).filter(Boolean))];
 const cats = await query('*[_type=="category" && _id in $ids]{_id, key, title}', { ids: catRefs });
 const catById = Object.fromEntries(cats.map((c) => [c._id, c]));
-const missingCats = catRefs.filter((id) => !catById[id]);
+for (const c of extraCategories) {
+  if (!catById[c._id]) catById[c._id] = c;
+}
+const missingCats = catRefs.filter((id) => !catById[id] && !extraCatIds.has(id));
 if (missingCats.length) die(`أقسام غير موجودة في اللوحة: ${missingCats.join(', ')}\nأنشئها أولاً أو حدّث _ref في dishes.ndjson.`);
 
 const existingDishIds = new Set(await query('*[_type=="dish" && _id in $ids]._id', { ids: dishes.map((d) => d._id) }));
@@ -140,7 +151,8 @@ const settingsDoc = (!skipHero && heroAvailable)
 log(`\nالمشروع: ${projectId} / ${dataset}`);
 log(`الصور:   ${imageFiles.length} ملف — ${imageFiles.filter((f) => assetByFile[f]).length} مرفوعة مسبقاً، ${imageFiles.filter((f) => !assetByFile[f]).length} سترفع الآن`);
 log(`الإضافات: ${teaExtras.length} — ${teaExtras.filter((e) => existingExtraIds.has(e._id)).length} موجودة، ${teaExtras.filter((e) => !existingExtraIds.has(e._id)).length} ستُنشأ`);
-log(`الأطباق: ${dishes.length} — ${dishes.filter((d) => existingDishIds.has(d._id)).length} موجودة، ${dishes.filter((d) => !existingDishIds.has(d._id)).length} ستُنشأ${force ? ' (وضع --force: ستُستبدل الموجودة أيضاً)' : ''}${patchImages ? ' (وضع --patch-images: ستُحدّث صور الموجودة فقط)' : ''}\n`);
+log(`الأقسام: ${extraCategories.length} إضافية — ${extraCategories.filter((c) => cats.some((x) => x._id === c._id)).length} موجودة، ${extraCategories.filter((c) => !cats.some((x) => x._id === c._id)).length} ستُنشأ`);
+log(`الأطباق: ${dishes.length} — ${dishes.filter((d) => existingDishIds.has(d._id)).length} موجودة، ${dishes.filter((d) => !existingDishIds.has(d._id)).length} ستُنشأ${force ? ' (وضع --force: ستُستبدل الموجودة أيضاً)' : ''}${patchImages ? ' (وضع --patch-images: ستُحدّث صور الموجودة فقط)' : ''}${patchPrices ? ' (وضع --patch-prices: ستُحدّث أسعار الموجودة فقط)' : ''}\n`);
 
 log(`خلفية الواجهة: ${skipHero ? 'متخطاة (--no-hero)' : !heroAvailable ? `الملف غير موجود (${heroFile})` : settingsDoc ? `سيُضبط heroBackground من ${basename(heroFile)}` : 'لا يوجد مستند siteSettings بعد'}`);
 
@@ -175,6 +187,7 @@ const assetIdForPlaceholder = (ref) => {
 };
 
 const mutations = [];
+for (const c of extraCategories) mutations.push({ createIfNotExists: c });
 for (const e of teaExtras) mutations.push({ createIfNotExists: e });
 
 for (const d of dishes) {
@@ -196,6 +209,14 @@ for (const d of dishes) {
         set: { image: doc.image },
       },
     });
+  } else if (patchPrices && existingDishIds.has(d._id) && typeof doc.price === 'number') {
+    // حدّث السعر فقط — لا يمسّ الوصف أو الصورة أو أي تعديل من لوحة التحكم
+    mutations.push({
+      patch: {
+        id: doc._id,
+        set: { price: doc.price },
+      },
+    });
   } else {
     mutations.push(force ? { createOrReplace: doc } : { createIfNotExists: doc });
   }
@@ -206,7 +227,7 @@ const res = await mutate(mutations);
 const created = (res.results || []).filter((r) => r.operation === 'create').length;
 const updated = (res.results || []).filter((r) => r.operation === 'update').length;
 log(`✅ تم. أُنشئ ${created} مستند${updated ? `، وحُدّث ${updated}` : ''}. (transactionId: ${res.transactionId})`);
-log('   افتح لوحة التحكم لضبط الأسعار — سيعرض الموقع «السعر عند الطلب» حتى تُدخل السعر.');
+log('   الأصناف الجديدة تظهر فوراً. لتحديث أسعار الأصناف الموجودة شغّل مع --patch-prices.');
 
 // ---------- صورة خلفية الواجهة ----------
 if (!skipHero && heroAvailable) {
