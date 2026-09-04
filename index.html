@@ -1168,7 +1168,7 @@ function buildCroppedImageUrl(img) {
   var assetId = asset._id || asset._ref || '';
   if (!baseUrl && assetId) {
     // نبني URL من _id: image-{hash}-{w}x{h}-{ext}
-    var m = assetId.match(/^image-([a-zA-Z0-9]+)-(\d+x\d+)-(\w+)$/);
+    var m = assetId.match(/^image-([a-zA-Z0-9-]+)-(\d+x\d+)-(\w+)$/);
     if (m) {
       baseUrl = 'https://cdn.sanity.io/images/' + SANITY_CONFIG.projectId + '/' + SANITY_CONFIG.dataset + '/' + m[1] + '-' + m[2] + '.' + m[3];
     }
@@ -1321,7 +1321,7 @@ var QUERIES={
   extras:'*[_type=="extra"]',
   dishes:'*[_type=="dish"]|order(order asc){...,"imageUrl":imageUrl,"image":image{_type,asset->{_id,url},crop,hotspot},category->{_id,key},extras[]{_ref,"name":@->name,"price":@->price}}',
   offers:'*[_type=="offer"&&active==true]{...,"imageUrl": image.asset->url}',
-  settings:'*[_type=="siteSettings"][0]'
+  settings:'*[_type=="siteSettings"][0]{...,heroBackground{_type,asset->{_id,url},crop,hotspot}}'
 };
 
 async function loadSanityData(){
