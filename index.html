@@ -1321,7 +1321,12 @@ var QUERIES={
   extras:'*[_type=="extra"]',
   dishes:'*[_type=="dish"]|order(order asc){...,"imageUrl":imageUrl,"image":image{_type,asset->{_id,url},crop,hotspot},category->{_id,key},extras[]{_ref,"name":@->name,"price":@->price}}',
   offers:'*[_type=="offer"&&active==true]{...,"imageUrl": image.asset->url}',
-  settings:'*[_type=="siteSettings"][0]{...,heroBackground{_type,asset->{_id,url},crop,hotspot}}'
+  /* قراءة محدّدة لمستند الإعدادات: كانت *[...][0] تقرأ أقدم مستند siteSettings،
+     فوجود مستند مكرر في قاعدة البيانات جعل اللوحة تعدّل مستنداً والموقع يقرأ غيره
+     (الخلفية «لا تتغيّر» وصورة عالقة لا تختفي). الآن نفضّل المستند المفرد
+     _id==siteSettings — نفس المستند المثبَّت في هيكل اللوحة — وإن غاب نأخذ الأحدث
+     تعديلاً، فلا تعود النتيجة غير محدّدة. */
+  settings:'*[_type==\"siteSettings\"] | order(select(_id == \"siteSettings\" => 1, 0) desc, _updatedAt desc)[0]{...,heroBackground{_type,asset->{_id,url},crop,hotspot}}'
 };
 
 async function loadSanityData(){

@@ -133,7 +133,7 @@ const skipHero = argv.includes('--no-hero');
 const heroFile = arg('hero', join(here, '..', 'assets', 'logo.jpg'));
 const heroAvailable = existsSync(heroFile);
 const settingsDoc = (!skipHero && heroAvailable)
-  ? await query('*[_type=="siteSettings"][0]{_id}')
+  ? await query('*[_type=="siteSettings"] | order(select(_id == "siteSettings" => 1, 0) desc, _updatedAt desc)[0]{_id}')
   : null;
 
 // ---------- ملخص ----------
